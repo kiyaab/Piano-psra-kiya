@@ -53,7 +53,11 @@ class MiddleControlStrip(QWidget):
         # 1. STYLE CONTROLS & TRANSPORT GROUP
         # =====================================================================
         style_frame = QFrame()
-        style_frame.setStyleSheet("background: #14161A; border: 1px solid #22252C; border-radius: 4px; padding: 2px;")
+        style_frame.setStyleSheet(
+            "background: qlineargradient(x1:0,y1:0,x2:0,y2:1,"
+            "stop:0 #0E1220, stop:1 #0A0E18); "
+            "border: 1px solid #1A2040; border-radius: 5px; padding: 2px;"
+        )
         sf_layout = QHBoxLayout(style_frame)
         sf_layout.setContentsMargins(4, 2, 4, 2)
         sf_layout.setSpacing(4)

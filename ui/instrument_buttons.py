@@ -44,7 +44,7 @@ class RightInstrumentPanel(QWidget):
 
         # --- SECTION 1: 16 VOICE CATEGORIES GRID (4 cols x 4 rows) ---
         cat_group = QFrame()
-        cat_group.setStyleSheet("background: #14161A; border: 1px solid #22252C; border-radius: 4px; padding: 4px;")
+        cat_group.setStyleSheet("background: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #10141E,stop:1 #0C1018); border: 1px solid #1E2640; border-radius: 5px; padding: 4px;")
         cg_layout = QVBoxLayout(cat_group)
         cg_layout.setContentsMargins(6, 4, 6, 4)
         cg_layout.setSpacing(4)
@@ -82,7 +82,7 @@ class RightInstrumentPanel(QWidget):
 
         # --- SECTION 2: KEYBOARD PART SELECT & ON/OFF ---
         part_group = QFrame()
-        part_group.setStyleSheet("background: #14161A; border: 1px solid #22252C; border-radius: 4px; padding: 4px;")
+        part_group.setStyleSheet("background: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #10141E,stop:1 #0C1018); border: 1px solid #1E2640; border-radius: 5px; padding: 4px;")
         pg_layout = QVBoxLayout(part_group)
         pg_layout.setContentsMargins(6, 4, 6, 4)
         pg_layout.setSpacing(4)
@@ -141,7 +141,7 @@ class RightInstrumentPanel(QWidget):
 
         # --- SECTION 3: VOICE EFFECTS CLUSTER ---
         fx_group = QFrame()
-        fx_group.setStyleSheet("background: #14161A; border: 1px solid #22252C; border-radius: 4px; padding: 4px;")
+        fx_group.setStyleSheet("background: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #10141E,stop:1 #0C1018); border: 1px solid #1E2640; border-radius: 5px; padding: 4px;")
         fg_layout = QVBoxLayout(fx_group)
         fg_layout.setContentsMargins(6, 4, 6, 4)
         fg_layout.setSpacing(4)

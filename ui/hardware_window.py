@@ -61,7 +61,13 @@ class HardwareWindow(QMainWindow):
             self.resize(1400, 800)
 
         self.setMinimumSize(1024, 600)
-        self.setStyleSheet(f"background-color: {HardwareColors.CHASSIS_BG};")
+        self.setStyleSheet(
+            f"QMainWindow {{ background-color: {HardwareColors.CHASSIS_BG}; }}"
+            f"QWidget#HardwareShell {{ background: transparent; }}"
+            f"QWidget {{ color: {HardwareColors.BUTTON_TEXT}; }}"
+            f"QToolTip {{ background: #101828; color: #C0D4F0; border: 1px solid #2A4070; "
+            f"padding: 4px 8px; border-radius: 4px; font-size: 10px; }}"
+        )
 
         # Computer Keyboard mapping
         self.keymap = ComputerKeymap(base_note=48)
@@ -82,10 +88,17 @@ class HardwareWindow(QMainWindow):
             parent=self
         )
 
-        # Subtle bottom status bar
+        # Premium status bar
         status = QStatusBar(self)
-        status.setStyleSheet("background: #08090B; color: #5D6C7B; font-size: 11px; border-top: 1px solid #14161A;")
-        lbl_info = QLabel("  KIYA Piano Studio Pro  |  PSR-S975 Hardware Engine  |  [F11] Fullscreen  |  [ESC] Panic  |  PC Keys: Z-M / Q-U")
+        status.setStyleSheet(
+            "QStatusBar { background: #060810; color: #445568; font-size: 11px; "
+            "border-top: 1px solid #101828; padding: 1px 0px; }"
+            "QStatusBar QLabel { color: #3A5570; padding: 0px 4px; }"
+        )
+        lbl_info = QLabel(
+            "  KIYA Piano Studio Pro  |  PSR-S975 Hardware Engine  |  "
+            "[F11] Fullscreen  |  [ESC] Panic  |  PC Keys: Z-M / Q-U"
+        )
         lbl_info.setFont(HardwareFonts.micro_regular())
         status.addWidget(lbl_info)
         self.setStatusBar(status)

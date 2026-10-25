@@ -125,7 +125,7 @@ class LeftControlPanel(QWidget):
 
         # Song Transport Group
         song_group = QFrame()
-        song_group.setStyleSheet("background: #14161A; border: 1px solid #22252C; border-radius: 4px; padding: 4px;")
+        song_group.setStyleSheet("background: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #10141E,stop:1 #0C1018); border: 1px solid #1E2640; border-radius: 5px; padding: 4px;")
         sg_layout = QVBoxLayout(song_group)
         sg_layout.setContentsMargins(6, 4, 6, 4)
         sg_layout.setSpacing(4)
@@ -165,7 +165,7 @@ class LeftControlPanel(QWidget):
 
         # --- ROW 2: STYLE CATEGORY SELECTION MATRIX ---
         cat_group = QFrame()
-        cat_group.setStyleSheet("background: #14161A; border: 1px solid #22252C; border-radius: 4px; padding: 4px;")
+        cat_group.setStyleSheet("background: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #10141E,stop:1 #0C1018); border: 1px solid #1E2640; border-radius: 5px; padding: 4px;")
         cg_layout = QVBoxLayout(cat_group)
         cg_layout.setContentsMargins(6, 4, 6, 4)
         cg_layout.setSpacing(4)
@@ -196,7 +196,7 @@ class LeftControlPanel(QWidget):
 
         # --- ROW 3: TEMPO, METRONOME, TRANSPOSE & OCTAVE ---
         perf_group = QFrame()
-        perf_group.setStyleSheet("background: #14161A; border: 1px solid #22252C; border-radius: 4px; padding: 4px;")
+        perf_group.setStyleSheet("background: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #10141E,stop:1 #0C1018); border: 1px solid #1E2640; border-radius: 5px; padding: 4px;")
         pg_layout = QVBoxLayout(perf_group)
         pg_layout.setContentsMargins(6, 4, 6, 4)
         pg_layout.setSpacing(6)

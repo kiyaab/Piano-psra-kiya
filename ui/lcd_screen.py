@@ -39,25 +39,36 @@ class LCDScreenBezel(QFrame):
         w = self.width()
         h = self.height()
 
-        # Outer bezel recess
+        # Outer bezel recess — deep obsidian inset frame
         outer_rect = QRectF(0, 0, w, h)
         grad = QLinearGradient(0, 0, 0, h)
-        grad.setColorAt(0.0, QColor("#07080A"))
-        grad.setColorAt(0.08, QColor("#14161A"))
-        grad.setColorAt(0.92, QColor("#14161A"))
-        grad.setColorAt(1.0, QColor("#090A0D"))
+        grad.setColorAt(0.0, QColor("#040508"))
+        grad.setColorAt(0.06, QColor("#0E1018"))
+        grad.setColorAt(0.94, QColor("#0E1018"))
+        grad.setColorAt(1.0, QColor("#050608"))
 
-        painter.setPen(QPen(QColor("#030405"), 2.0))
+        painter.setPen(QPen(QColor("#020308"), 2.5))
         painter.setBrush(QBrush(grad))
-        painter.drawRoundedRect(outer_rect, 6.0, 6.0)
+        painter.drawRoundedRect(outer_rect, 8.0, 8.0)
 
-        # 1px inner highlight edge at top
-        painter.setPen(QPen(QColor(255, 255, 255, 25), 1.0))
-        painter.drawLine(2, 2, w - 3, 2)
+        # Inner glowing top rim — blue-tinted chrome
+        from PySide6.QtGui import QLinearGradient as LG
+        rim_g = LG(0, 0, w, 0)
+        rim_g.setColorAt(0.0, QColor(0, 0, 0, 0))
+        rim_g.setColorAt(0.2, QColor(40, 80, 160, 60))
+        rim_g.setColorAt(0.5, QColor(60, 110, 200, 90))
+        rim_g.setColorAt(0.8, QColor(40, 80, 160, 60))
+        rim_g.setColorAt(1.0, QColor(0, 0, 0, 0))
+        painter.setPen(QPen(QBrush(rim_g), 1.0))
+        painter.drawLine(4, 2, w - 5, 2)
 
-        # 1px bottom inner shadow
-        painter.setPen(QPen(QColor(0, 0, 0, 180), 1.5))
-        painter.drawLine(2, h - 2, w - 3, h - 2)
+        # Subtle white highlight
+        painter.setPen(QPen(QColor(255, 255, 255, 20), 1.0))
+        painter.drawLine(4, 3, w - 5, 3)
+
+        # Bottom deep shadow
+        painter.setPen(QPen(QColor(0, 0, 0, 200), 1.5))
+        painter.drawLine(4, h - 3, w - 5, h - 3)
 
 
 # =========================================================================
@@ -99,31 +110,46 @@ class AudioSpectrumWidget(QWidget):
 
     def paintEvent(self, event: QPaintEvent):
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing, False)
+        painter.setRenderHint(QPainter.Antialiasing, True)
         w = float(self.width())
         h = float(self.height())
-        bar_w = (w - (self.num_bars - 1) * 3.0) / float(self.num_bars)
+        bar_w = (w - (self.num_bars - 1) * 2.5) / float(self.num_bars)
 
-        # Background tray
-        painter.fillRect(QRectF(0, 0, w, h), QColor("#0A1118"))
+        # Tinted background tray with gradient
+        bg = QLinearGradient(0, 0, 0, h)
+        bg.setColorAt(0.0, QColor("#081018"))
+        bg.setColorAt(1.0, QColor("#0A1420"))
+        painter.fillRect(QRectF(0, 0, w, h), QBrush(bg))
 
         for i in range(self.num_bars):
-            bx = i * (bar_w + 3.0)
+            bx = i * (bar_w + 2.5)
             val = self.values[i]
             bar_h = val * (h - 4.0)
 
-            # Gradient bar
+            # Vivid neon gradient bars
             grad = QLinearGradient(0, h - 2.0, 0, 2.0)
-            grad.setColorAt(0.0, QColor("#10B981"))
-            grad.setColorAt(0.65, QColor("#F59E0B"))
-            grad.setColorAt(1.0, QColor("#EF4444"))
+            grad.setColorAt(0.0, QColor("#00CC66"))    # vivid green base
+            grad.setColorAt(0.55, QColor("#00EEBB"))   # teal-green mid
+            grad.setColorAt(0.80, QColor("#FFB700"))   # amber high
+            grad.setColorAt(1.0, QColor("#FF4060"))    # red peak
 
-            painter.fillRect(QRectF(bx, h - 2.0 - bar_h, bar_w, bar_h), QBrush(grad))
+            # Bar body
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(QBrush(grad))
+            painter.drawRoundedRect(QRectF(bx, h - 2.0 - bar_h, bar_w, bar_h), 1.5, 1.5)
 
-            # Peak hold dot
+            # Subtle bar glow overlay
+            glow_g = QLinearGradient(bx, 0, bx + bar_w, 0)
+            glow_g.setColorAt(0.0, QColor(255, 255, 255, 30))
+            glow_g.setColorAt(0.5, QColor(255, 255, 255, 10))
+            glow_g.setColorAt(1.0, QColor(255, 255, 255, 20))
+            painter.setBrush(QBrush(glow_g))
+            painter.drawRoundedRect(QRectF(bx, h - 2.0 - bar_h, bar_w * 0.4, bar_h), 1.5, 1.5)
+
+            # Peak hold dot (bright red)
             pk = self.peak_values[i]
             pk_y = h - 2.0 - (pk * (h - 4.0))
-            painter.setPen(QColor("#FF5252"))
+            painter.setPen(QPen(QColor("#FF4060"), 1.5))
             painter.drawLine(int(bx), int(pk_y), int(bx + bar_w), int(pk_y))
 
 
@@ -148,29 +174,29 @@ class MainPerformancePage(QWidget):
 
         self.lbl_title = QLabel("PSR-S975 ARRANGER")
         self.lbl_title.setFont(HardwareFonts.micro_bold())
-        self.lbl_title.setStyleSheet("color: #10B981; font-weight: bold; letter-spacing: 0.5px;")
+        self.lbl_title.setStyleSheet("color: #39FF8A; font-weight: bold; letter-spacing: 1px;")
         status_bar.addWidget(self.lbl_title)
 
         status_bar.addStretch()
 
         self.lbl_chord = QLabel("CHORD: C Maj")
         self.lbl_chord.setFont(HardwareFonts.micro_bold())
-        self.lbl_chord.setStyleSheet("color: #FFB347; background: #0A1118; padding: 2px 8px; border-radius: 3px; border: 1px solid #2B3D4F; font-weight: bold;")
+        self.lbl_chord.setStyleSheet("color: #FFB726; background: #160D00; padding: 2px 10px; border-radius: 4px; border: 1px solid #3D2A00; font-weight: bold; letter-spacing: 0.5px;")
         status_bar.addWidget(self.lbl_chord)
 
-        self.lbl_tempo = QLabel("TEMPO: 120")
+        self.lbl_tempo = QLabel("TEMPO: 120 [4/4]")
         self.lbl_tempo.setFont(HardwareFonts.micro_bold())
-        self.lbl_tempo.setStyleSheet("color: #E8EDF1; background: #0A1118; padding: 2px 8px; border-radius: 3px; border: 1px solid #1E3040;")
+        self.lbl_tempo.setStyleSheet("color: #E8F4FF; background: #081020; padding: 2px 10px; border-radius: 4px; border: 1px solid #1A3060; font-weight: bold;")
         status_bar.addWidget(self.lbl_tempo)
 
         self.lbl_measure = QLabel("BAR: 001 : 1")
         self.lbl_measure.setFont(HardwareFonts.micro_bold())
-        self.lbl_measure.setStyleSheet("color: #38BDF8; background: #0A1118; padding: 2px 8px; border-radius: 3px; border: 1px solid #1E3040;")
+        self.lbl_measure.setStyleSheet("color: #38B4FF; background: #080F20; padding: 2px 10px; border-radius: 4px; border: 1px solid #153060; font-weight: bold;")
         status_bar.addWidget(self.lbl_measure)
 
         self.lbl_transpose = QLabel("TRANS: +0")
         self.lbl_transpose.setFont(HardwareFonts.micro_bold())
-        self.lbl_transpose.setStyleSheet("color: #94A3B8; background: #0A1118; padding: 2px 6px; border-radius: 3px; border: 1px solid #1E3040;")
+        self.lbl_transpose.setStyleSheet("color: #8AABCC; background: #080E1A; padding: 2px 8px; border-radius: 4px; border: 1px solid #152040;")
         status_bar.addWidget(self.lbl_transpose)
 
         layout.addLayout(status_bar)
@@ -183,50 +209,61 @@ class MainPerformancePage(QWidget):
 
         # === COLUMN 1: ARRANGER STYLE & LIVE CHORD TRACKER ===
         box_left = QFrame()
-        box_left.setStyleSheet("background: #141E28; border: 1px solid #223444; border-radius: 6px;")
+        box_left.setStyleSheet(
+            "background: qlineargradient(x1:0,y1:0,x2:0,y2:1,"
+            "stop:0 #101828, stop:1 #0C1420);"
+            "border: 1px solid #1A3050; border-radius: 8px;"
+        )
         bl_layout = QVBoxLayout(box_left)
-        bl_layout.setContentsMargins(10, 8, 10, 8)
-        bl_layout.setSpacing(4)
+        bl_layout.setContentsMargins(12, 10, 12, 10)
+        bl_layout.setSpacing(5)
 
         # Style Header
         style_header = QHBoxLayout()
         lbl_style_title = QLabel("ACCOMPANIMENT STYLE")
         lbl_style_title.setFont(HardwareFonts.micro_bold())
-        lbl_style_title.setStyleSheet("color: #7B8D9E; letter-spacing: 0.5px;")
+        lbl_style_title.setStyleSheet("color: #4A6A88; letter-spacing: 0.8px;")
         self.lbl_style_genre = QLabel("[POP & ROCK]")
         self.lbl_style_genre.setFont(HardwareFonts.micro_bold())
-        self.lbl_style_genre.setStyleSheet("color: #38BDF8; background: #0F283D; padding: 1px 5px; border-radius: 2px;")
+        self.lbl_style_genre.setStyleSheet(
+            "color: #38B4FF; background: #0A1C30; padding: 2px 7px; "
+            "border-radius: 3px; border: 1px solid #1A4070; font-weight: bold;"
+        )
         style_header.addWidget(lbl_style_title)
         style_header.addStretch()
         style_header.addWidget(self.lbl_style_genre)
         bl_layout.addLayout(style_header)
 
-        # Style Name
+        # Style Name (large, vivid)
         self.lbl_style_name = QLabel("8-Beat Modern Pop")
-        font_style = QFont("Segoe UI", 13, QFont.Bold)
+        font_style = QFont("Segoe UI", 14, QFont.Bold)
         self.lbl_style_name.setFont(font_style)
-        self.lbl_style_name.setStyleSheet("color: #FFFFFF; font-weight: bold;")
+        self.lbl_style_name.setStyleSheet("color: #F0F8FF; font-weight: bold; letter-spacing: 0.3px;")
         bl_layout.addWidget(self.lbl_style_name)
 
         # Section & ACMP Line
         sec_box = QHBoxLayout()
         self.lbl_style_section = QLabel("SECTION: MAIN A  |  ACMP: ON")
         self.lbl_style_section.setFont(HardwareFonts.label_regular())
-        self.lbl_style_section.setStyleSheet("color: #10B981; font-weight: bold;")
+        self.lbl_style_section.setStyleSheet("color: #39FF8A; font-weight: bold;")
         sec_box.addWidget(self.lbl_style_section)
         sec_box.addStretch()
 
         self.btn_select_style = QPushButton("BROWSE STYLES")
         self.btn_select_style.setFont(HardwareFonts.micro_bold())
-        self.btn_select_style.setStyleSheet("background: #1E2D3D; color: #E2E8F0; border: 1px solid #33485E; padding: 2px 8px; border-radius: 3px;")
+        self.btn_select_style.setStyleSheet(
+            "background: #142030; color: #C8DEFA; border: 1px solid #2A4870; "
+            "padding: 3px 10px; border-radius: 4px; font-weight: bold;"
+            "} QPushButton:hover { background: #1C3050; border-color: #3A6090; }"
+        )
         self.btn_select_style.clicked.connect(self.styleClicked.emit)
         sec_box.addWidget(self.btn_select_style)
         bl_layout.addLayout(sec_box)
 
-        # Subtle divider
+        # Gold accent divider
         div1 = QFrame()
         div1.setFixedHeight(1)
-        div1.setStyleSheet("background: #1F2E3C;")
+        div1.setStyleSheet("background: qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #0C1420, stop:0.3 #2A4060, stop:0.7 #2A4060, stop:1 #0C1420);")
         bl_layout.addWidget(div1)
 
         # Live Chord Tracker Section
@@ -239,21 +276,24 @@ class MainPerformancePage(QWidget):
 
         self.lbl_beat_dots = QLabel("●   ○   ○   ○")
         self.lbl_beat_dots.setFont(HardwareFonts.micro_bold())
-        self.lbl_beat_dots.setStyleSheet("color: #10B981; letter-spacing: 2px; font-weight: bold;")
+        self.lbl_beat_dots.setStyleSheet("color: #39FF8A; letter-spacing: 3px; font-weight: bold;")
         chord_header.addWidget(self.lbl_beat_dots)
         bl_layout.addLayout(chord_header)
 
         chord_row = QHBoxLayout()
         self.lbl_hero_chord = QLabel("C Major")
-        font_hero = QFont("Segoe UI", 18, QFont.Bold)
+        font_hero = QFont("Segoe UI", 20, QFont.Bold)
         self.lbl_hero_chord.setFont(font_hero)
-        self.lbl_hero_chord.setStyleSheet("color: #FFB347; font-weight: bold; letter-spacing: 0.5px;")
+        self.lbl_hero_chord.setStyleSheet("color: #FFB726; font-weight: bold; letter-spacing: 0.5px;")
         chord_row.addWidget(self.lbl_hero_chord)
         chord_row.addStretch()
 
         self.lbl_rec_status = QLabel("SYNC ARMED • 4/4")
         self.lbl_rec_status.setFont(HardwareFonts.micro_bold())
-        self.lbl_rec_status.setStyleSheet("color: #38BDF8; background: #0B253D; padding: 2px 6px; border-radius: 2px;")
+        self.lbl_rec_status.setStyleSheet(
+            "color: #38B4FF; background: #081828; padding: 3px 8px; "
+            "border-radius: 4px; border: 1px solid #153060; font-weight: bold;"
+        )
         chord_row.addWidget(self.lbl_rec_status)
         bl_layout.addLayout(chord_row)
 
