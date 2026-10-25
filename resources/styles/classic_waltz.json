@@ -1,0 +1,746 @@
+{
+  "name": "Classical Waltz",
+  "category": "Classical",
+  "tempo": 138,
+  "time_signature": [
+    3,
+    4
+  ],
+  "drum_program": 0,
+  "bass_program": 32,
+  "chord1_program": 48,
+  "chord2_program": 73,
+  "phrase_program": 40,
+  "ots": [
+    {
+      "name": "Violin Solo",
+      "right1": 40,
+      "right2": 48,
+      "layer": false,
+      "left": 32,
+      "split": true
+    },
+    {
+      "name": "Strings & Flute",
+      "right1": 73,
+      "right2": 48,
+      "layer": true,
+      "left": 32,
+      "split": true
+    },
+    {
+      "name": "Concert Grand Piano",
+      "right1": 0,
+      "right2": 48,
+      "layer": true,
+      "left": 32,
+      "split": true
+    },
+    {
+      "name": "Cello Solo",
+      "right1": 42,
+      "right2": 0,
+      "layer": false,
+      "left": 32,
+      "split": true
+    }
+  ],
+  "bars_per_section": {
+    "INTRO": 2,
+    "MAIN_A": 2,
+    "MAIN_B": 2,
+    "MAIN_C": 2,
+    "MAIN_D": 2,
+    "FILL_AA": 1,
+    "FILL_BB": 1,
+    "FILL_CC": 1,
+    "FILL_DD": 1,
+    "BREAK": 1,
+    "ENDING": 2
+  },
+  "sections": {
+    "MAIN_A": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 85,
+          "duration": 18
+        },
+        {
+          "tick": 24,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 36,
+          "vel": 85,
+          "duration": 18
+        },
+        {
+          "tick": 96,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 120,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 90,
+          "duration": 20
+        },
+        {
+          "tick": 72,
+          "degree": 0,
+          "vel": 90,
+          "duration": 20
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 24,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 48,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 96,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 120,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "MAIN_B": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 85,
+          "duration": 18
+        },
+        {
+          "tick": 24,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 36,
+          "vel": 85,
+          "duration": 18
+        },
+        {
+          "tick": 96,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 120,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 90,
+          "duration": 20
+        },
+        {
+          "tick": 72,
+          "degree": 0,
+          "vel": 90,
+          "duration": 20
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 24,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 48,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 96,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 120,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        }
+      ],
+      "chord2": [
+        {
+          "tick": 0,
+          "degrees": [
+            0,
+            7
+          ],
+          "vel": 70,
+          "duration": 70
+        }
+      ],
+      "phrase": []
+    },
+    "MAIN_C": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 85,
+          "duration": 18
+        },
+        {
+          "tick": 24,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 36,
+          "vel": 85,
+          "duration": 18
+        },
+        {
+          "tick": 96,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 120,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 90,
+          "duration": 20
+        },
+        {
+          "tick": 72,
+          "degree": 0,
+          "vel": 90,
+          "duration": 20
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 24,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 48,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 96,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 120,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "MAIN_D": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 85,
+          "duration": 18
+        },
+        {
+          "tick": 24,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 36,
+          "vel": 85,
+          "duration": 18
+        },
+        {
+          "tick": 96,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 120,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 90,
+          "duration": 20
+        },
+        {
+          "tick": 72,
+          "degree": 0,
+          "vel": 90,
+          "duration": 20
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 24,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 48,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 96,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 120,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "FILL_AA": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 90,
+          "duration": 18
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 95,
+          "duration": 18
+        },
+        {
+          "tick": 48,
+          "note": 48,
+          "vel": 100,
+          "duration": 18
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 90,
+          "duration": 36
+        }
+      ],
+      "chord1": [],
+      "chord2": [],
+      "phrase": []
+    },
+    "FILL_BB": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 49,
+          "vel": 100,
+          "duration": 24
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 95,
+          "duration": 18
+        },
+        {
+          "tick": 48,
+          "note": 45,
+          "vel": 100,
+          "duration": 18
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 90,
+          "duration": 36
+        }
+      ],
+      "chord1": [],
+      "chord2": [],
+      "phrase": []
+    },
+    "FILL_CC": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 90,
+          "duration": 18
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 95,
+          "duration": 18
+        },
+        {
+          "tick": 48,
+          "note": 50,
+          "vel": 100,
+          "duration": 18
+        }
+      ],
+      "bass": [],
+      "chord1": [],
+      "chord2": [],
+      "phrase": []
+    },
+    "FILL_DD": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 49,
+          "vel": 105,
+          "duration": 24
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 100,
+          "duration": 18
+        },
+        {
+          "tick": 48,
+          "note": 49,
+          "vel": 105,
+          "duration": 18
+        }
+      ],
+      "bass": [],
+      "chord1": [],
+      "chord2": [],
+      "phrase": []
+    },
+    "BREAK": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 49,
+          "vel": 100,
+          "duration": 24
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 24
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 0,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 24
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "INTRO": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 85,
+          "duration": 18
+        },
+        {
+          "tick": 24,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 36,
+          "vel": 85,
+          "duration": 18
+        },
+        {
+          "tick": 96,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        },
+        {
+          "tick": 120,
+          "note": 42,
+          "vel": 75,
+          "duration": 12
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 90,
+          "duration": 20
+        },
+        {
+          "tick": 72,
+          "degree": 0,
+          "vel": 90,
+          "duration": 20
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 24,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 48,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 96,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        },
+        {
+          "tick": 120,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 80,
+          "duration": 18
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "ENDING": {
+      "drums": [
+        {
+          "tick": 48,
+          "note": 49,
+          "vel": 105,
+          "duration": 24
+        }
+      ],
+      "bass": [
+        {
+          "tick": 48,
+          "degree": 0,
+          "vel": 100,
+          "duration": 24
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 48,
+          "degrees": [
+            0,
+            4,
+            7,
+            12
+          ],
+          "vel": 95,
+          "duration": 24
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    }
+  }
+}

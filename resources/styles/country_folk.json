@@ -1,0 +1,1439 @@
+{
+  "name": "Country Folk",
+  "category": "Country",
+  "tempo": 112,
+  "time_signature": [
+    4,
+    4
+  ],
+  "drum_program": 0,
+  "bass_program": 32,
+  "chord1_program": 25,
+  "chord2_program": 21,
+  "phrase_program": 105,
+  "ots": [
+    {
+      "name": "Steel Acoustic Guitar",
+      "right1": 25,
+      "right2": 0,
+      "layer": false,
+      "left": 32,
+      "split": true
+    },
+    {
+      "name": "Country Banjo",
+      "right1": 105,
+      "right2": 0,
+      "layer": false,
+      "left": 32,
+      "split": true
+    },
+    {
+      "name": "Folk Accordion",
+      "right1": 21,
+      "right2": 48,
+      "layer": false,
+      "left": 32,
+      "split": true
+    },
+    {
+      "name": "Harmonica Lead",
+      "right1": 22,
+      "right2": 25,
+      "layer": false,
+      "left": 32,
+      "split": true
+    }
+  ],
+  "bars_per_section": {
+    "INTRO": 2,
+    "MAIN_A": 2,
+    "MAIN_B": 2,
+    "MAIN_C": 2,
+    "MAIN_D": 2,
+    "FILL_AA": 1,
+    "FILL_BB": 1,
+    "FILL_CC": 1,
+    "FILL_DD": 1,
+    "BREAK": 1,
+    "ENDING": 2
+  },
+  "sections": {
+    "MAIN_A": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 0,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 12,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 24,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 36,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 48,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 60,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 72,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 84,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 96,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 144,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 120,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 168,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 96,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 108,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 120,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 132,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 144,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 156,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 168,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 180,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 20
+        },
+        {
+          "tick": 48,
+          "degree": 7,
+          "vel": 90,
+          "duration": 20
+        },
+        {
+          "tick": 96,
+          "degree": 0,
+          "vel": 95,
+          "duration": 20
+        },
+        {
+          "tick": 144,
+          "degree": 7,
+          "vel": 90,
+          "duration": 20
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 24,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 72,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 120,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 168,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        }
+      ],
+      "chord2": [
+        {
+          "tick": 0,
+          "degrees": [
+            0,
+            7
+          ],
+          "vel": 70,
+          "duration": 90
+        }
+      ],
+      "phrase": []
+    },
+    "MAIN_B": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 0,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 12,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 24,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 36,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 48,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 60,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 72,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 84,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 96,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 144,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 120,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 168,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 96,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 108,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 120,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 132,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 144,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 156,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 168,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 180,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 20
+        },
+        {
+          "tick": 48,
+          "degree": 7,
+          "vel": 90,
+          "duration": 20
+        },
+        {
+          "tick": 96,
+          "degree": 0,
+          "vel": 95,
+          "duration": 20
+        },
+        {
+          "tick": 144,
+          "degree": 7,
+          "vel": 90,
+          "duration": 20
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 24,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 72,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 120,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 168,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        }
+      ],
+      "chord2": [
+        {
+          "tick": 0,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 75,
+          "duration": 90
+        }
+      ],
+      "phrase": []
+    },
+    "MAIN_C": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 0,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 12,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 24,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 36,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 48,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 60,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 72,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 84,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 96,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 144,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 120,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 168,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 96,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 108,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 120,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 132,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 144,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 156,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 168,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 180,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 20
+        },
+        {
+          "tick": 48,
+          "degree": 7,
+          "vel": 90,
+          "duration": 20
+        },
+        {
+          "tick": 96,
+          "degree": 0,
+          "vel": 95,
+          "duration": 20
+        },
+        {
+          "tick": 144,
+          "degree": 7,
+          "vel": 90,
+          "duration": 20
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 24,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 72,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 120,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 168,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "MAIN_D": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 0,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 12,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 24,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 36,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 48,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 60,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 72,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 84,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 96,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 144,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 120,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 168,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 96,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 108,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 120,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 132,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 144,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 156,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 168,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 180,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 20
+        },
+        {
+          "tick": 48,
+          "degree": 7,
+          "vel": 90,
+          "duration": 20
+        },
+        {
+          "tick": 96,
+          "degree": 0,
+          "vel": 95,
+          "duration": 20
+        },
+        {
+          "tick": 144,
+          "degree": 7,
+          "vel": 90,
+          "duration": 20
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 24,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 72,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 120,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 168,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "FILL_AA": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 38,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 48,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 45,
+          "vel": 105,
+          "duration": 12
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 48
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 0,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 48
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "FILL_BB": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 49,
+          "vel": 105,
+          "duration": 24
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 48,
+          "vel": 105,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 45,
+          "vel": 110,
+          "duration": 12
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 48
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 0,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 48
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "FILL_CC": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 50,
+          "vel": 105,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 47,
+          "vel": 110,
+          "duration": 12
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 48
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 0,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 48
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "FILL_DD": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 49,
+          "vel": 115,
+          "duration": 24
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 105,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 45,
+          "vel": 110,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 49,
+          "vel": 115,
+          "duration": 12
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 48
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 0,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 48
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "BREAK": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 49,
+          "vel": 105,
+          "duration": 24
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 24
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 0,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 90,
+          "duration": 24
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "INTRO": {
+      "drums": [
+        {
+          "tick": 0,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 48,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 24,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 72,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 0,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 12,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 24,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 36,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 48,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 60,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 72,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 84,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 96,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 144,
+          "note": 36,
+          "vel": 95,
+          "duration": 12
+        },
+        {
+          "tick": 120,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 168,
+          "note": 38,
+          "vel": 100,
+          "duration": 12
+        },
+        {
+          "tick": 96,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 108,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 120,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 132,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 144,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 156,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        },
+        {
+          "tick": 168,
+          "note": 42,
+          "vel": 90,
+          "duration": 8
+        },
+        {
+          "tick": 180,
+          "note": 42,
+          "vel": 70,
+          "duration": 8
+        }
+      ],
+      "bass": [
+        {
+          "tick": 0,
+          "degree": 0,
+          "vel": 95,
+          "duration": 20
+        },
+        {
+          "tick": 48,
+          "degree": 7,
+          "vel": 90,
+          "duration": 20
+        },
+        {
+          "tick": 96,
+          "degree": 0,
+          "vel": 95,
+          "duration": 20
+        },
+        {
+          "tick": 144,
+          "degree": 7,
+          "vel": 90,
+          "duration": 20
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 24,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 72,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 120,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        },
+        {
+          "tick": 168,
+          "degrees": [
+            0,
+            4,
+            7
+          ],
+          "vel": 85,
+          "duration": 16
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    },
+    "ENDING": {
+      "drums": [
+        {
+          "tick": 48,
+          "note": 49,
+          "vel": 110,
+          "duration": 48
+        }
+      ],
+      "bass": [
+        {
+          "tick": 48,
+          "degree": 0,
+          "vel": 105,
+          "duration": 48
+        }
+      ],
+      "chord1": [
+        {
+          "tick": 48,
+          "degrees": [
+            0,
+            4,
+            7,
+            12
+          ],
+          "vel": 100,
+          "duration": 48
+        }
+      ],
+      "chord2": [],
+      "phrase": []
+    }
+  }
+}
