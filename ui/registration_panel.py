@@ -30,6 +30,8 @@ class RegistrationPanel(QWidget):
     slotRecalled = Signal(int)      # slot index 1-8
     slotStored = Signal(int)        # slot index 1-8
     freezeToggled = Signal(bool)
+    loadBankRequested = Signal()
+    exportBankRequested = Signal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -37,7 +39,7 @@ class RegistrationPanel(QWidget):
 
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(6, 4, 6, 4)
-        main_layout.setSpacing(6)
+        main_layout.setSpacing(5)
         main_layout.setAlignment(Qt.AlignCenter)
 
         # Title & Bank Display
@@ -59,18 +61,18 @@ class RegistrationPanel(QWidget):
         main_layout.addLayout(bank_box)
 
         # Bank - / + Buttons
-        self.btn_bank_dec = PhysicalButton("−", width=26, height=26, button_color=HardwareColors.BUTTON_DARK)
+        self.btn_bank_dec = PhysicalButton("−", width=24, height=26, button_color=HardwareColors.BUTTON_DARK)
         self.btn_bank_dec.clicked.connect(lambda: self._step_bank(-1))
         main_layout.addWidget(self.btn_bank_dec)
 
-        self.btn_bank_inc = PhysicalButton("+", width=26, height=26, button_color=HardwareColors.BUTTON_DARK)
+        self.btn_bank_inc = PhysicalButton("+", width=24, height=26, button_color=HardwareColors.BUTTON_DARK)
         self.btn_bank_inc.clicked.connect(lambda: self._step_bank(1))
         main_layout.addWidget(self.btn_bank_inc)
 
         # MEMORY Arm Button (Red LED)
         self.btn_memory = PhysicalButton(
             "MEMORY",
-            width=58,
+            width=54,
             height=28,
             button_color=HardwareColors.BUTTON_DARK,
             indicator="red"
@@ -83,7 +85,7 @@ class RegistrationPanel(QWidget):
         for i in range(1, 9):
             btn = PhysicalButton(
                 str(i),
-                width=32,
+                width=28,
                 height=28,
                 button_color=HardwareColors.BUTTON_DARK,
                 indicator="blue" if i == 1 else None
@@ -95,13 +97,25 @@ class RegistrationPanel(QWidget):
         # FREEZE Button (Amber LED)
         self.btn_freeze = PhysicalButton(
             "FREEZE",
-            width=52,
+            width=48,
             height=28,
             button_color=HardwareColors.BUTTON_DARK,
             indicator="amber"
         )
         self.btn_freeze.clicked.connect(self._toggle_freeze)
         main_layout.addWidget(self.btn_freeze)
+
+        # Quick LOAD .RGT / EXPORT buttons
+        self.btn_load_rgt = PhysicalButton(
+            "LOAD",
+            secondary_text=".RGT",
+            width=50,
+            height=28,
+            button_color=HardwareColors.BUTTON_DARK,
+            indicator="blue"
+        )
+        self.btn_load_rgt.clicked.connect(self.loadBankRequested.emit)
+        main_layout.addWidget(self.btn_load_rgt)
 
         # Internal state
         self._current_bank = 1

@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QFrame
 )
 from PySide6.QtGui import (
-    QPainter, QColor, QPen, QBrush, QFont, QPaintEvent
+    QPainter, QColor, QPen, QBrush, QFont, QPaintEvent, QLinearGradient
 )
 
 from ui.physical_button import PhysicalButton
@@ -25,16 +25,22 @@ class DigitalDisplayReadout(QFrame):
     """
     Realistic backlit 7-segment LED digital display box
     used for Transpose, Octave, and Tempo values.
+    Features authentic recessed dark lens with glowing digits and faint unlit segment ghosting.
     """
-    def __init__(self, title: str = "TRANSPOSE", initial_text: str = "+0", parent=None):
+    def __init__(self, title: str = "TRANSPOSE", initial_text: str = "+0", color: str = "#10B981", parent=None):
         super().__init__(parent)
         self.title = title
         self.text_value = initial_text
+        self.glow_color = QColor(color)
         self.setFixedSize(68, 38)
         self.setStyleSheet("background: transparent;")
 
     def set_value(self, val_text: str):
         self.text_value = val_text
+        self.update()
+
+    def set_color(self, color_hex: str):
+        self.glow_color = QColor(color_hex)
         self.update()
 
     def paintEvent(self, event: QPaintEvent):
@@ -44,25 +50,47 @@ class DigitalDisplayReadout(QFrame):
         w = self.width()
         h = self.height()
 
-        # Recessed background bezel
-        painter.setPen(QPen(QColor("#050608"), 1.5))
-        painter.setBrush(QBrush(QColor("#080D12")))
-        painter.drawRoundedRect(0, 0, w, h, 3.0, 3.0)
+        # Recessed background bezel socket
+        painter.setPen(QPen(QColor("#040508"), 1.5))
+        painter.setBrush(QBrush(QColor("#070A0F")))
+        painter.drawRoundedRect(0, 0, w, h, 4.0, 4.0)
 
-        # 1px top highlight
-        painter.setPen(QPen(QColor(255, 255, 255, 20), 1.0))
-        painter.drawLine(2, 1, w - 3, 1)
+        # Inner dark display glass with subtle top-to-bottom shading
+        lens_grad = QLinearGradient(0, 1, 0, h - 2)
+        lens_grad.setColorAt(0.0, QColor("#0D131C"))
+        lens_grad.setColorAt(0.5, QColor("#080D14"))
+        lens_grad.setColorAt(1.0, QColor("#05080E"))
+        painter.setPen(QPen(QColor("#1A2433"), 1.0))
+        painter.setBrush(lens_grad)
+        painter.drawRoundedRect(1, 1, w - 2, h - 2, 3.0, 3.0)
+
+        # 1px top glass highlight
+        painter.setPen(QPen(QColor(255, 255, 255, 30), 1.0))
+        painter.drawLine(3, 2, w - 4, 2)
 
         # Title at top
         painter.setFont(HardwareFonts.micro_bold())
-        painter.setPen(QColor("#718096"))
-        title_h = max(10.0, h * 0.38)
+        painter.setPen(QColor("#71859E"))
+        title_h = max(10.0, h * 0.36)
         painter.drawText(QRectF(1, 1, w - 2, title_h), Qt.AlignCenter, self.title)
 
-        # Glowing green/amber digital readout
+        # Glowing digital readout (glow halo + brilliant core)
         painter.setFont(HardwareFonts.sub_bold())
-        painter.setPen(QColor("#10B981"))
-        painter.drawText(QRectF(1, title_h - 1, w - 2, h - title_h), Qt.AlignCenter, self.text_value)
+        text_rect = QRectF(1, title_h - 1, w - 2, h - title_h)
+
+        # Halo
+        halo_col = QColor(self.glow_color.red(), self.glow_color.green(), self.glow_color.blue(), 60)
+        painter.setPen(halo_col)
+        painter.drawText(text_rect.translated(0, 0.5), Qt.AlignCenter, self.text_value)
+
+        # Brilliant digit core
+        core_col = QColor(
+            min(255, self.glow_color.red() + 60),
+            min(255, self.glow_color.green() + 60),
+            min(255, self.glow_color.blue() + 60)
+        )
+        painter.setPen(core_col)
+        painter.drawText(text_rect, Qt.AlignCenter, self.text_value)
 
 
 class LeftControlPanel(QWidget):
@@ -82,8 +110,9 @@ class LeftControlPanel(QWidget):
     songRecord = Signal()
     songSelect = Signal()
 
-    # Style category signal
+    # Style category & file load signals
     styleCategorySelected = Signal(str)
+    loadStyleRequested = Signal()
 
     # Tempo / Performance signals
     tempoUp = Signal()
@@ -170,10 +199,17 @@ class LeftControlPanel(QWidget):
         cg_layout.setContentsMargins(6, 4, 6, 4)
         cg_layout.setSpacing(4)
 
+        cg_header = QHBoxLayout()
         cg_title = QLabel("STYLE CATEGORIES")
         cg_title.setFont(HardwareFonts.micro_bold())
         cg_title.setStyleSheet("color: #657585;")
-        cg_layout.addWidget(cg_title)
+        cg_header.addWidget(cg_title)
+        cg_header.addStretch()
+
+        self.btn_import_style = PhysicalButton("LOAD .STY", width=68, height=22, button_color=HardwareColors.BUTTON_DARK, indicator="blue")
+        self.btn_import_style.clicked.connect(self.loadStyleRequested.emit)
+        cg_header.addWidget(self.btn_import_style)
+        cg_layout.addLayout(cg_header)
 
         cat_grid = QGridLayout()
         cat_grid.setSpacing(4)
@@ -186,8 +222,14 @@ class LeftControlPanel(QWidget):
         ]
         self.style_cat_buttons = {}
         for cat_name, row, col in style_cats:
-            btn = PhysicalButton(cat_name, width=72, height=26, button_color=HardwareColors.BUTTON_DARK)
-            btn.clicked.connect(lambda c=cat_name: self.styleCategorySelected.emit(c))
+            btn = PhysicalButton(
+                cat_name,
+                width=72,
+                height=26,
+                button_color=HardwareColors.BUTTON_DARK,
+                indicator="green" if cat_name == "POP & ROCK" else None
+            )
+            btn.clicked.connect(lambda c=cat_name: self._on_cat_clicked(c))
             self.style_cat_buttons[cat_name] = btn
             cat_grid.addWidget(btn, row, col)
 
@@ -201,35 +243,29 @@ class LeftControlPanel(QWidget):
         pg_layout.setContentsMargins(6, 4, 6, 4)
         pg_layout.setSpacing(6)
 
-        # Sub-Row A: Tempo & Metronome
+        # Sub-Row A: Tempo & Metronome with Digital BPM Readout
         row_tempo = QHBoxLayout()
-        row_tempo.setSpacing(6)
+        row_tempo.setSpacing(4)
 
-        lbl_tempo_title = QLabel("TEMPO")
-        lbl_tempo_title.setFont(HardwareFonts.micro_bold())
-        lbl_tempo_title.setStyleSheet("color: #7B8594; font-size: 9px;")
-        row_tempo.addWidget(lbl_tempo_title)
+        self.display_tempo = DigitalDisplayReadout(title="BPM", initial_text="120", color="#39FF8A")
+        self.display_tempo.setFixedSize(58, 30)
+        row_tempo.addWidget(self.display_tempo)
 
-        self.btn_tempo_dec = PhysicalButton("−", width=32, height=26, button_color=HardwareColors.BUTTON_DARK)
+        self.btn_tempo_dec = PhysicalButton("−", width=28, height=28, button_color=HardwareColors.BUTTON_DARK)
         self.btn_tempo_dec.clicked.connect(self.tempoDown.emit)
         row_tempo.addWidget(self.btn_tempo_dec)
 
-        self.btn_tap = PhysicalButton("TAP", width=38, height=26, button_color=HardwareColors.BUTTON_DARK, indicator="amber")
+        self.btn_tap = PhysicalButton("TAP", width=34, height=28, button_color=HardwareColors.BUTTON_DARK, indicator="amber")
         self.btn_tap.clicked.connect(self.tapTempo.emit)
         row_tempo.addWidget(self.btn_tap)
 
-        self.btn_tempo_inc = PhysicalButton("+", width=32, height=26, button_color=HardwareColors.BUTTON_DARK)
+        self.btn_tempo_inc = PhysicalButton("+", width=28, height=28, button_color=HardwareColors.BUTTON_DARK)
         self.btn_tempo_inc.clicked.connect(self.tempoUp.emit)
         row_tempo.addWidget(self.btn_tempo_inc)
 
         row_tempo.addStretch()
 
-        lbl_m = QLabel("METRO")
-        lbl_m.setFont(HardwareFonts.micro_bold())
-        lbl_m.setStyleSheet("color: #7B8594; font-size: 9px;")
-        row_tempo.addWidget(lbl_m)
-
-        self.btn_metro = PhysicalButton("ON/OFF", width=50, height=26, button_color=HardwareColors.BUTTON_DARK, indicator="amber")
+        self.btn_metro = PhysicalButton("METRO", secondary_text="ON/OFF", width=52, height=28, button_color=HardwareColors.BUTTON_DARK, indicator="amber")
         self.btn_metro.clicked.connect(self.metronomeToggle.emit)
         row_tempo.addWidget(self.btn_metro)
 
@@ -239,12 +275,12 @@ class LeftControlPanel(QWidget):
         row_pitch = QHBoxLayout()
         row_pitch.setSpacing(4)
 
-        # Transpose
+        # Transpose (Amber LED Display)
         self.btn_trans_dec = PhysicalButton("−", width=26, height=28, button_color=HardwareColors.BUTTON_DARK)
         self.btn_trans_dec.clicked.connect(self.transposeDown.emit)
         row_pitch.addWidget(self.btn_trans_dec)
 
-        self.display_transpose = DigitalDisplayReadout(title="TRANSPOSE", initial_text="+0")
+        self.display_transpose = DigitalDisplayReadout(title="TRANSPOSE", initial_text="+0", color="#FFB726")
         self.display_transpose.setFixedSize(64, 30)
         row_pitch.addWidget(self.display_transpose)
 
@@ -254,12 +290,12 @@ class LeftControlPanel(QWidget):
 
         row_pitch.addStretch()
 
-        # Octave
+        # Octave (Cyan LED Display)
         self.btn_oct_dec = PhysicalButton("OCT −", width=42, height=28, button_color=HardwareColors.BUTTON_DARK)
         self.btn_oct_dec.clicked.connect(self.octaveDown.emit)
         row_pitch.addWidget(self.btn_oct_dec)
 
-        self.display_octave = DigitalDisplayReadout(title="OCTAVE", initial_text="0")
+        self.display_octave = DigitalDisplayReadout(title="OCTAVE", initial_text="0", color="#38B4FF")
         self.display_octave.setFixedSize(54, 30)
         row_pitch.addWidget(self.display_octave)
 
@@ -270,3 +306,8 @@ class LeftControlPanel(QWidget):
         pg_layout.addLayout(row_pitch)
 
         main_layout.addWidget(perf_group)
+
+    def _on_cat_clicked(self, cat_name: str):
+        for name, btn in self.style_cat_buttons.items():
+            btn.set_led(name == cat_name)
+        self.styleCategorySelected.emit(cat_name)

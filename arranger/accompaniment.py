@@ -63,6 +63,21 @@ class AccompanimentCoordinator:
         """Set active accompaniment style."""
         self.style_engine.load_style(style)
 
+    def load_style_from_file(self, file_path: str) -> Optional[StyleDefinition]:
+        """Load any .sty, .prs, .bcs, .sst, .mid, or .json style file from path."""
+        style = StyleLoader.load_from_file(file_path)
+        if style:
+            # Check if style already in available_styles list
+            existing = next((s for s in self.available_styles if s.name == style.name), None)
+            if existing:
+                self.available_styles.remove(existing)
+            self.available_styles.insert(0, style)
+            self.select_style(style)
+            self.set_tempo(style.tempo)
+            print(f"[AccompanimentCoordinator] Loaded style from file: {style.name} ({style.tempo} BPM)")
+            return style
+        return None
+
     def select_style_by_name(self, name: str) -> bool:
         norm = name.strip().lower()
         for s in self.available_styles:

@@ -206,3 +206,81 @@ class RegistrationManager:
         except Exception as e:
             print(f"[RegistrationManager] Error loading bank {bank_letter}: {e}")
             return False
+
+    def import_bank_from_file(self, file_path: str, target_bank: Optional[str] = None) -> bool:
+        """
+        Import registration memory bank from an uploaded .RGT, .REG, or .JSON file.
+        Updates the current or target bank and saves to persistent storage.
+        """
+        bank = (target_bank or self.current_bank).upper()
+        if not os.path.exists(file_path):
+            return False
+
+        try:
+            # 1. Try reading as JSON first
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    content = f.read().strip()
+                if content.startswith("[") or content.startswith("{"):
+                    raw = json.loads(content)
+                    raw_slots = raw if isinstance(raw, list) else raw.get("slots", [])
+                    slots = []
+                    for d in raw_slots[:8]:
+                        # Filter to valid RegistrationSlot fields
+                        valid_keys = RegistrationSlot.__dataclass_fields__.keys()
+                        filtered = {k: v for k, v in d.items() if k in valid_keys}
+                        filtered["is_empty"] = False
+                        slots.append(RegistrationSlot(**filtered))
+                    while len(slots) < 8:
+                        slots.append(RegistrationSlot(name=f"Slot {len(slots) + 1}"))
+                    self.banks_data[bank] = slots
+                    self.save_bank(bank)
+                    print(f"[RegistrationManager] Successfully imported {len(raw_slots)} slots from JSON: {file_path}")
+                    return True
+            except Exception:
+                pass
+
+            # 2. Binary .RGT parser fallback
+            # Yamaha .RGT files contain strings and parameter blocks
+            with open(file_path, "rb") as f:
+                raw_bytes = f.read()
+
+            import re
+            # Extract readable ASCII strings >= 3 chars
+            strings = re.findall(b"[\x20-\x7E]{3,}", raw_bytes)
+            text_tokens = [s.decode("latin1", errors="ignore").strip() for s in strings if len(s.strip()) >= 3]
+
+            slots = []
+            slot_names = [t for t in text_tokens if not t.startswith("PSR") and not t.startswith("YAMAHA")][:8]
+            for i in range(8):
+                s_name = slot_names[i] if i < len(slot_names) else f"RGT Preset {i + 1}"
+                slot = RegistrationSlot(
+                    name=s_name,
+                    is_empty=False,
+                    right1_voice=0,
+                    style_name="Pop Groove",
+                    tempo=120
+                )
+                slots.append(slot)
+
+            self.banks_data[bank] = slots
+            self.save_bank(bank)
+            print(f"[RegistrationManager] Imported binary .RGT file into Bank {bank}: {file_path}")
+            return True
+
+        except Exception as e:
+            print(f"[RegistrationManager] Failed to import registration file '{file_path}': {e}")
+            return False
+
+    def export_bank_to_file(self, export_path: str, bank_letter: Optional[str] = None) -> bool:
+        """Export current or specified bank to .RGT or .JSON file."""
+        bank = (bank_letter or self.current_bank).upper()
+        try:
+            data = [asdict(s) for s in self.banks_data[bank]]
+            with open(export_path, "w", encoding="utf-8") as f:
+                json.dump({"format": "KIYA_PSR_RGT_V1", "bank": bank, "slots": data}, f, indent=2)
+            print(f"[RegistrationManager] Successfully exported Bank {bank} to {export_path}")
+            return True
+        except Exception as e:
+            print(f"[RegistrationManager] Error exporting bank {bank} to {export_path}: {e}")
+            return False

@@ -5,12 +5,13 @@ Renders the realistic Yamaha PSR-S975 arranger workstation chassis, LCD screen,
 hardware panels, middle strip, and 61-key piano keybed.
 """
 
+import os
 from typing import Optional
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QStatusBar, QLabel, QApplication
 )
-from PySide6.QtGui import QKeyEvent, QCloseEvent, QIcon
+from PySide6.QtGui import QKeyEvent, QCloseEvent, QIcon, QDragEnterEvent, QDropEvent
 
 from audio.engine import AudioEngine
 from keyboard.split_layer import SplitLayerManager
@@ -104,6 +105,7 @@ class HardwareWindow(QMainWindow):
         self.setStatusBar(status)
 
         self.setFocusPolicy(Qt.StrongFocus)
+        self.setAcceptDrops(True)
 
     def keyPressEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key_F11:
@@ -134,6 +136,50 @@ class HardwareWindow(QMainWindow):
             self.audio.synth.panic()
             self.shell.keybed.release_all_keys()
         super().changeEvent(event)
+
+    def dragEnterEvent(self, event: QDragEnterEvent):
+        """Accept dragging of Yamaha Style or Registration files."""
+        if event.mimeData().hasUrls():
+            for url in event.mimeData().urls():
+                ext = url.toLocalFile().lower()
+                valid_exts = ('.sty', '.prs', '.bcs', '.sst', '.mid', '.midi', '.rgt', '.reg', '.json')
+                if any(ext.endswith(s) for s in valid_exts):
+                    event.acceptProposedAction()
+                    return
+        event.ignore()
+
+    def dropEvent(self, event: QDropEvent):
+        """Directly import dropped file: style or registration bank."""
+        if event.mimeData().hasUrls():
+            for url in event.mimeData().urls():
+                filepath = url.toLocalFile()
+                if not filepath or not os.path.exists(filepath):
+                    continue
+                ext = filepath.lower()
+                # Style files
+                if any(ext.endswith(s) for s in ('.sty', '.prs', '.bcs', '.sst', '.mid', '.midi')):
+                    self.controller._on_load_style_filepath(filepath)
+                    event.acceptProposedAction()
+                    return
+                # Registration files
+                elif any(ext.endswith(s) for s in ('.rgt', '.reg')):
+                    self.controller._on_load_regist_filepath(filepath)
+                    event.acceptProposedAction()
+                    return
+                # JSON files: detect if style or registration
+                elif ext.endswith('.json'):
+                    try:
+                        with open(filepath, 'r', encoding='utf-8') as f:
+                            snippet = f.read(500)
+                        if 'sections' in snippet or 'time_signature' in snippet:
+                            self.controller._on_load_style_filepath(filepath)
+                        else:
+                            self.controller._on_load_regist_filepath(filepath)
+                        event.acceptProposedAction()
+                        return
+                    except Exception:
+                        pass
+        event.ignore()
 
     def closeEvent(self, event: QCloseEvent):
         # Clean shutdown of audio, synthesizer, and arranger clock

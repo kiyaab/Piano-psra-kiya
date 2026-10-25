@@ -224,87 +224,120 @@ class PhysicalButton(QWidget):
                 int(face_rect.right() - 3), int(face_rect.bottom())
             )
 
-        # ── 7. Integrated Jewel LED ─────────────────────────────────────────
+        # ── 7. Integrated Jewel LED & Surface Reflection ───────────────────
         has_led = bool(self.led_color)
         if has_led:
             led_cx = face_rect.center().x()
             led_cy = face_rect.top() + 5.5
-            draw_led_jewel(painter, led_cx, led_cy, radius=3.0, is_on=self._is_led_on, color_type=self.led_color)
+            draw_led_jewel(painter, led_cx, led_cy, radius=3.2, is_on=self._is_led_on, color_type=self.led_color)
 
-        # ── 8. Button text silkscreen ───────────────────────────────────────
-        enabled_col = QColor(HW_BTN_TEXT) if self.isEnabled() else QColor("#3A4058")
-        sec_col = QColor(HW_BTN_TEXT_SEC) if self.isEnabled() else QColor("#252C3A")
+            # Surface illumination reflection from LED onto the button face
+            if self._is_led_on:
+                led_reflect_colors = {
+                    "red": QColor(255, 60, 70, 35),
+                    "amber": QColor(255, 175, 40, 35),
+                    "blue": QColor(50, 180, 255, 35),
+                    "cyan": QColor(0, 230, 255, 35),
+                    "green": QColor(50, 255, 120, 35)
+                }
+                refl_col = led_reflect_colors.get(self.led_color, QColor(50, 255, 120, 35))
+                refl_grad = QRadialGradient(led_cx, led_cy, face_rect.height() * 0.8)
+                refl_grad.setColorAt(0.0, refl_col)
+                refl_grad.setColorAt(1.0, QColor(0, 0, 0, 0))
+                painter.setPen(Qt.PenStyle.NoPen)
+                painter.setBrush(refl_grad)
+                painter.drawRoundedRect(face_rect, radius, radius)
 
-        avail_w = max(10.0, face_rect.width() - 6.0)
+        # ── 8. Button text silkscreen with high-contrast drop shadow ───────
+        enabled_col = QColor("#FFFFFF") if self.isEnabled() else QColor("#455268")
+        shadow_col = QColor(0, 0, 0, 220) if self.isEnabled() else QColor(0, 0, 0, 120)
+        sec_col = QColor("#A4BEDE") if self.isEnabled() else QColor("#2D3648")
+
+        avail_w = max(10.0, face_rect.width() - 4.0)
         avail_h = max(10.0, face_rect.height())
 
-        if self.secondary_label:
-            # Two-line layout
+        # Determine if we should split a long single-line label into 2 lines
+        prim_text = self.label
+        sub_text = self.secondary_label
+
+        if not sub_text and " " in prim_text:
+            # Check if primary text is too wide for comfortable single-line rendering
+            test_font = get_hardware_font(size=8, bold=True)
+            painter.setFont(test_font)
+            if painter.fontMetrics().horizontalAdvance(prim_text) > avail_w:
+                parts = prim_text.rsplit(" ", 1)
+                prim_text = parts[0]
+                sub_text = parts[1]
+
+        if sub_text:
+            # Two-line layout with crisp typography
             f_size = 7.5
             font = get_hardware_font(size=int(f_size), bold=True)
             painter.setFont(font)
-            while f_size > 5.0 and painter.fontMetrics().horizontalAdvance(self.label) > avail_w:
+            while f_size > 5.5 and painter.fontMetrics().horizontalAdvance(prim_text) > avail_w:
                 f_size -= 0.5
                 font = get_hardware_font(size=max(5, int(f_size)), bold=True)
                 painter.setFont(font)
 
             if has_led:
-                prim_y = face_rect.top() + 9.0
-                row_h = (avail_h - 11.0) / 2.0
+                prim_y = face_rect.top() + 9.5
+                row_h = (avail_h - 11.5) / 2.0
                 sec_y = prim_y + row_h
             else:
                 prim_y = face_rect.top() + 2.0
                 row_h = (avail_h - 4.0) / 2.0
                 sec_y = prim_y + row_h
 
+            # Draw primary line (drop shadow + crisp face)
+            rect_prim = QRectF(face_rect.left() + 2, prim_y, avail_w, row_h)
+            painter.setPen(shadow_col)
+            painter.drawText(rect_prim.translated(0, 1.0), Qt.AlignmentFlag.AlignCenter, prim_text)
             painter.setPen(enabled_col)
-            painter.drawText(
-                QRectF(face_rect.left() + 3, prim_y, avail_w, row_h),
-                Qt.AlignmentFlag.AlignCenter,
-                self.label
-            )
-            painter.setPen(sec_col)
-            sec_f_size = 6.5
-            font_sec = get_hardware_font(size=int(sec_f_size), bold=False)
+            painter.drawText(rect_prim, Qt.AlignmentFlag.AlignCenter, prim_text)
+
+            # Draw secondary line (drop shadow + crisp face)
+            sec_f_size = 7.0
+            font_sec = get_hardware_font(size=int(sec_f_size), bold=True)
             painter.setFont(font_sec)
-            while sec_f_size > 4.5 and painter.fontMetrics().horizontalAdvance(self.secondary_label) > avail_w:
+            while sec_f_size > 5.0 and painter.fontMetrics().horizontalAdvance(sub_text) > avail_w:
                 sec_f_size -= 0.5
-                font_sec = get_hardware_font(size=max(4, int(sec_f_size)), bold=False)
+                font_sec = get_hardware_font(size=max(5, int(sec_f_size)), bold=True)
                 painter.setFont(font_sec)
-            painter.drawText(
-                QRectF(face_rect.left() + 3, sec_y, avail_w, row_h),
-                Qt.AlignmentFlag.AlignCenter,
-                self.secondary_label
-            )
+
+            rect_sec = QRectF(face_rect.left() + 2, sec_y, avail_w, row_h)
+            painter.setPen(shadow_col)
+            painter.drawText(rect_sec.translated(0, 1.0), Qt.AlignmentFlag.AlignCenter, sub_text)
+            painter.setPen(sec_col)
+            painter.drawText(rect_sec, Qt.AlignmentFlag.AlignCenter, sub_text)
+
         else:
             # Single-line layout
             f_size = 8.5
             font = get_hardware_font(size=int(f_size), bold=True)
             painter.setFont(font)
-            while f_size > 5.0 and painter.fontMetrics().horizontalAdvance(self.label) > avail_w:
+            while f_size > 5.5 and painter.fontMetrics().horizontalAdvance(prim_text) > avail_w:
                 f_size -= 0.5
                 font = get_hardware_font(size=max(5, int(f_size)), bold=True)
                 painter.setFont(font)
 
             if has_led:
-                prim_y = face_rect.top() + 8.5
-                prim_h = avail_h - 10.0
+                prim_y = face_rect.top() + 9.0
+                prim_h = avail_h - 10.5
             else:
                 prim_y = face_rect.top()
                 prim_h = avail_h
 
+            rect_single = QRectF(face_rect.left() + 2, prim_y, avail_w, prim_h)
+            painter.setPen(shadow_col)
+            painter.drawText(rect_single.translated(0, 1.0), Qt.AlignmentFlag.AlignCenter, prim_text)
             painter.setPen(enabled_col)
-            painter.drawText(
-                QRectF(face_rect.left() + 3, prim_y, avail_w, prim_h),
-                Qt.AlignmentFlag.AlignCenter,
-                self.label
-            )
+            painter.drawText(rect_single, Qt.AlignmentFlag.AlignCenter, prim_text)
 
         # ── 9. Hover glow overlay ───────────────────────────────────────────
         if self._is_hovered and self.isEnabled() and not self._is_pressed:
             hover_grad = QLinearGradient(0, face_rect.top(), 0, face_rect.bottom())
-            hover_grad.setColorAt(0.0, QColor(100, 130, 220, 25))
-            hover_grad.setColorAt(1.0, QColor(60, 80, 180, 10))
-            painter.setPen(Qt.PenStyle.NoPen)
+            hover_grad.setColorAt(0.0, QColor(120, 160, 255, 35))
+            hover_grad.setColorAt(1.0, QColor(60, 100, 220, 15))
+            painter.setPen(QPen(QColor(140, 180, 255, 90), 1.0))
             painter.setBrush(hover_grad)
             painter.drawRoundedRect(face_rect, radius, radius)

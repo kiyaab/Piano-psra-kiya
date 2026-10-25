@@ -10,9 +10,11 @@ multi-pads, registration memory, and piano keys to the underlying engines:
 - PC Keyboard Mapping
 """
 
+import os
 import time
 from typing import Optional
 from PySide6.QtCore import QObject, Qt, QTimer
+from PySide6.QtWidgets import QFileDialog
 
 from audio.engine import AudioEngine
 from keyboard.split_layer import SplitLayerManager
@@ -151,8 +153,10 @@ class InteractionController(QObject):
         self.left_panel.songStop.connect(self._on_song_stop)
         self.left_panel.songRecord.connect(self._on_song_record)
 
-        # Style Category Select
+        # Style Category Select & File Import
         self.left_panel.styleCategorySelected.connect(self._on_style_category)
+        if hasattr(self.left_panel, "loadStyleRequested"):
+            self.left_panel.loadStyleRequested.connect(self._on_browse_style_file)
 
     def _on_master_volume(self, vol: float):
         self.audio.set_master_volume(vol)
@@ -389,6 +393,11 @@ class InteractionController(QObject):
         # Registrations
         self.middle_strip.registration_panel.slotStored.connect(self._on_reg_store)
         self.middle_strip.registration_panel.slotRecalled.connect(self._on_reg_recall)
+        if hasattr(self.middle_strip, "loadStyleRequested"):
+            self.middle_strip.loadStyleRequested.connect(self._on_browse_style_file)
+        if hasattr(self.middle_strip.registration_panel, "loadBankRequested"):
+            self.middle_strip.registration_panel.loadBankRequested.connect(self._on_browse_regist_file)
+            self.middle_strip.registration_panel.exportBankRequested.connect(self._on_export_regist_file)
 
     def _on_start_stop(self):
         if self.arranger.is_playing:
@@ -492,17 +501,41 @@ class InteractionController(QObject):
     # 6. LCD SCREEN PAGES INTERACTION
     # =========================================================================
     def _connect_lcd_pages(self):
-        # Page 1: Performance Page clicks
+        # Page 0: Performance Page clicks
         self.lcd.p_perf.styleClicked.connect(lambda: self.lcd.switch_to_page(2))
+        if hasattr(self.lcd.p_perf, "loadStyleClicked"):
+            self.lcd.p_perf.loadStyleClicked.connect(self._on_browse_style_file)
+        if hasattr(self.lcd.p_perf, "loadRegistClicked"):
+            self.lcd.p_perf.loadRegistClicked.connect(self._on_browse_regist_file)
 
-        # Page 2: Voice Page assign
+        # Page 1: Voice Page assign
         self.lcd.p_voice.voiceSelected.connect(self._on_voice_assigned)
 
-        # Page 3: Style Page select
+        # Page 2: Style Page select & import
         self.lcd.p_style.styleSelected.connect(self._on_style_selected)
+        if hasattr(self.lcd.p_style, "importStyleRequested"):
+            self.lcd.p_style.importStyleRequested.connect(self._on_browse_style_file)
 
-        # Page 4: Mixer faders
+        # Page 3: Mixer faders
         self.lcd.p_mixer.channelVolumeChanged.connect(self._on_mixer_volume)
+
+        # Page 5: Registration Page
+        if hasattr(self.lcd.p_regist, "importBankRequested"):
+            self.lcd.p_regist.importBankRequested.connect(self._on_browse_regist_file)
+            self.lcd.p_regist.exportBankRequested.connect(self._on_export_regist_file)
+            self.lcd.p_regist.slotSelected.connect(self._on_reg_recall)
+
+        # Page 6: USB File Explorer Page
+        if hasattr(self.lcd, "p_file"):
+            self.lcd.p_file.importStyleRequested.connect(self._on_browse_style_file)
+            self.lcd.p_file.importRegistRequested.connect(self._on_browse_regist_file)
+            self.lcd.p_file.exportRegistRequested.connect(self._on_export_regist_file)
+            self.lcd.p_file.styleFileSelected.connect(self._on_load_style_filepath)
+            self.lcd.p_file.registFileSelected.connect(self._on_load_regist_filepath)
+
+        # LCD Hardware Softkeys [A]-[E] and [F]-[J]
+        if hasattr(self.lcd, "softkeyPressed"):
+            self.lcd.softkeyPressed.connect(self._on_softkey_pressed)
 
     def _on_voice_assigned(self, target: str, program: int, name: str):
         if target == "R1":
@@ -601,6 +634,98 @@ class InteractionController(QObject):
 
     def _update_tempo_display(self, bpm: int):
         self.lcd.p_perf.lbl_tempo.setText(f"TEMPO: {bpm}  [4/4]")
+        if hasattr(self.left_panel, "display_tempo"):
+            self.left_panel.display_tempo.set_value(str(bpm))
+
+    def _on_softkey_pressed(self, key_id: str):
+        """Handle hardware softkeys [A]-[E] on left and [F]-[J] on right."""
+        k = key_id.upper()
+        if k == "A":
+            self.lcd.switch_to_page(2)  # Style Page
+        elif k == "B":
+            self.lcd.switch_to_page(0)  # Main Performance Page
+        elif k == "C":
+            self.lcd.switch_to_page(5)  # Registration Page
+        elif k == "D":
+            self.lcd.switch_to_page(3)  # Mixer Page
+        elif k == "E":
+            self._on_browse_style_file() # Quick Load Style
+        elif k == "F":
+            self.right_panel.set_selected_part("R1")
+            self.lcd.switch_to_page(1)  # Voice Page (R1)
+        elif k == "G":
+            self.right_panel.set_selected_part("R2")
+            self.lcd.switch_to_page(1)  # Voice Page (R2)
+        elif k == "H":
+            self.right_panel.set_selected_part("LEFT")
+            self.lcd.switch_to_page(1)  # Voice Page (LEFT)
+        elif k == "I":
+            self.lcd.switch_to_page(4)  # DSP/FX Page
+        elif k == "J":
+            self.lcd.switch_to_page(6)  # USB File Explorer Page
+
+    def _on_browse_style_file(self):
+        """Open system file picker to select Yamaha Style or MIDI file."""
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.shell,
+            "Import Yamaha Style File",
+            "resources/styles",
+            "Yamaha Style / MIDI (*.sty *.prs *.bcs *.sst *.mid *.midi *.json);;All Files (*.*)"
+        )
+        if file_path:
+            self._on_load_style_filepath(file_path)
+
+    def _on_load_style_filepath(self, file_path: str):
+        """Parse and load Yamaha .sty / .mid / .json file into accompaniment engine."""
+        style = self.arranger.load_style_from_file(file_path)
+        if style:
+            self.lcd.p_perf.lbl_style_name.setText(style.name)
+            if hasattr(self.lcd.p_perf, "lbl_style_genre"):
+                self.lcd.p_perf.lbl_style_genre.setText(f"[{style.category.upper()}]")
+            self._update_tempo_display(style.tempo)
+            self.lcd.show_toast(f"STYLE LOADED: {style.name} ({style.tempo} BPM)", "#39FF8A")
+            if hasattr(self.lcd, "p_file"):
+                self.lcd.p_file.refresh_file_list()
+            self.lcd.switch_to_page(0)
+
+    def _on_browse_regist_file(self):
+        """Open system file picker to select Yamaha Registration Bank."""
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.shell,
+            "Import Yamaha Registration Bank",
+            "resources/registrations",
+            "Registration Bank Files (*.rgt *.reg *.json);;All Files (*.*)"
+        )
+        if file_path:
+            self._on_load_regist_filepath(file_path)
+
+    def _on_load_regist_filepath(self, file_path: str):
+        """Import registration memory bank from file."""
+        success = self.reg_manager.import_bank_from_file(file_path)
+        if success:
+            fname = os.path.basename(file_path)
+            self.lcd.show_toast(f"REG BANK LOADED: {fname}", "#38B4FF")
+            if hasattr(self.lcd.p_regist, "_populate_slots"):
+                self.lcd.p_regist._populate_slots()
+            if hasattr(self.lcd, "p_file"):
+                self.lcd.p_file.refresh_file_list()
+            self._on_reg_recall(1)
+
+    def _on_export_regist_file(self):
+        """Export active registration memory bank to a file."""
+        file_path, _ = QFileDialog.getSaveFileName(
+            self.shell,
+            "Export Registration Bank",
+            f"resources/registrations/User_Bank_{self.reg_manager.current_bank}.rgt",
+            "Registration Bank (*.rgt *.json);;All Files (*.*)"
+        )
+        if file_path:
+            success = self.reg_manager.export_bank_to_file(file_path)
+            if success:
+                fname = os.path.basename(file_path)
+                self.lcd.show_toast(f"REG BANK SAVED: {fname}", "#FFB726")
+                if hasattr(self.lcd, "p_file"):
+                    self.lcd.p_file.refresh_file_list()
 
     def handle_key_press(self, event):
         """Map computer keyboard presses to musical notes."""

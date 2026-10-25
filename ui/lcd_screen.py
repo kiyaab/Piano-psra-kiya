@@ -5,6 +5,7 @@ Features authentic workstation graphics, dark gray-blue palette, softkeys [A]-[E
 page tabs, and 10 fully functional interactive screen pages.
 """
 
+from pathlib import Path
 from typing import Optional, List, Dict
 from PySide6.QtCore import Qt, Signal, QTimer, QRectF
 from PySide6.QtWidgets import (
@@ -157,6 +158,8 @@ class MainPerformancePage(QWidget):
     """Page 1: PSR-S975 Main Performance Display - Clean 2-Column Workstation Layout."""
     voiceClicked = Signal(str)  # "R1", "R2", "LEFT"
     styleClicked = Signal()
+    loadStyleClicked = Signal()
+    loadRegistClicked = Signal()
     tempoClicked = Signal()
     registrationClicked = Signal(int)
 
@@ -176,6 +179,12 @@ class MainPerformancePage(QWidget):
         self.lbl_title.setFont(HardwareFonts.micro_bold())
         self.lbl_title.setStyleSheet("color: #39FF8A; font-weight: bold; letter-spacing: 1px;")
         status_bar.addWidget(self.lbl_title)
+
+        # HUD Toast notification badge (temporary messages)
+        self.lbl_hud_toast = QLabel("")
+        self.lbl_hud_toast.setFont(HardwareFonts.micro_bold())
+        self.lbl_hud_toast.setStyleSheet("color: #39FF8A; padding: 1px 6px; border-radius: 2px;")
+        status_bar.addWidget(self.lbl_hud_toast)
 
         status_bar.addStretch()
 
@@ -241,7 +250,7 @@ class MainPerformancePage(QWidget):
         self.lbl_style_name.setStyleSheet("color: #F0F8FF; font-weight: bold; letter-spacing: 0.3px;")
         bl_layout.addWidget(self.lbl_style_name)
 
-        # Section & ACMP Line
+        # Section & Action Line
         sec_box = QHBoxLayout()
         self.lbl_style_section = QLabel("SECTION: MAIN A  |  ACMP: ON")
         self.lbl_style_section.setFont(HardwareFonts.label_regular())
@@ -249,12 +258,20 @@ class MainPerformancePage(QWidget):
         sec_box.addWidget(self.lbl_style_section)
         sec_box.addStretch()
 
+        self.btn_load_style_quick = QPushButton("📂 LOAD .STY")
+        self.btn_load_style_quick.setFont(HardwareFonts.micro_bold())
+        self.btn_load_style_quick.setStyleSheet(
+            "background: #0E2418; color: #39FF8A; border: 1px solid #1E5030; "
+            "padding: 3px 8px; border-radius: 4px; font-weight: bold;"
+        )
+        self.btn_load_style_quick.clicked.connect(self.loadStyleClicked.emit)
+        sec_box.addWidget(self.btn_load_style_quick)
+
         self.btn_select_style = QPushButton("BROWSE STYLES")
         self.btn_select_style.setFont(HardwareFonts.micro_bold())
         self.btn_select_style.setStyleSheet(
             "background: #142030; color: #C8DEFA; border: 1px solid #2A4870; "
             "padding: 3px 10px; border-radius: 4px; font-weight: bold;"
-            "} QPushButton:hover { background: #1C3050; border-color: #3A6090; }"
         )
         self.btn_select_style.clicked.connect(self.styleClicked.emit)
         sec_box.addWidget(self.btn_select_style)
@@ -301,22 +318,38 @@ class MainPerformancePage(QWidget):
 
         # === COLUMN 2: KEYBOARD VOICES & AUDIO SPECTRUM ===
         box_right = QFrame()
-        box_right.setStyleSheet("background: #141E28; border: 1px solid #223444; border-radius: 6px;")
+        box_right.setStyleSheet(
+            "background: qlineargradient(x1:0,y1:0,x2:0,y2:1,"
+            "stop:0 #101828, stop:1 #0C1420);"
+            "border: 1px solid #1A3050; border-radius: 8px;"
+        )
         br_layout = QVBoxLayout(box_right)
-        br_layout.setContentsMargins(10, 8, 10, 8)
-        br_layout.setSpacing(4)
+        br_layout.setContentsMargins(12, 10, 12, 10)
+        br_layout.setSpacing(5)
 
-        # Voices Title
+        # Voices Title & Quick Load .RGT
+        v_head = QHBoxLayout()
         lbl_v_title = QLabel("KEYBOARD VOICES")
         lbl_v_title.setFont(HardwareFonts.micro_bold())
-        lbl_v_title.setStyleSheet("color: #7B8D9E; letter-spacing: 0.5px;")
-        br_layout.addWidget(lbl_v_title)
+        lbl_v_title.setStyleSheet("color: #4A6A88; letter-spacing: 0.8px;")
+        v_head.addWidget(lbl_v_title)
+        v_head.addStretch()
+
+        self.btn_load_reg_quick = QPushButton("📂 LOAD .RGT")
+        self.btn_load_reg_quick.setFont(HardwareFonts.micro_bold())
+        self.btn_load_reg_quick.setStyleSheet(
+            "background: #0A1C30; color: #38B4FF; border: 1px solid #1A4070; "
+            "padding: 2px 8px; border-radius: 4px; font-weight: bold;"
+        )
+        self.btn_load_reg_quick.clicked.connect(self.loadRegistClicked.emit)
+        v_head.addWidget(self.btn_load_reg_quick)
+        br_layout.addLayout(v_head)
 
         # R1 Voice
         r1_box = QHBoxLayout()
         r1_tag = QLabel("[R1 MAIN]")
         r1_tag.setFont(HardwareFonts.micro_bold())
-        r1_tag.setStyleSheet("color: #10B981; font-weight: bold; background: #0C2818; padding: 1px 4px; border-radius: 2px;")
+        r1_tag.setStyleSheet("color: #39FF8A; font-weight: bold; background: #0C2818; border: 1px solid #1E5030; padding: 2px 6px; border-radius: 3px;")
         self.lbl_r1_name = QLabel("Concert Grand Piano")
         self.lbl_r1_name.setFont(HardwareFonts.sub_bold())
         self.lbl_r1_name.setStyleSheet("color: #FFFFFF; font-weight: bold;")
@@ -329,7 +362,7 @@ class MainPerformancePage(QWidget):
         r2_box = QHBoxLayout()
         r2_tag = QLabel("[R2 LAYER]")
         r2_tag.setFont(HardwareFonts.micro_bold())
-        r2_tag.setStyleSheet("color: #38BDF8; font-weight: bold; background: #0E2538; padding: 1px 4px; border-radius: 2px;")
+        r2_tag.setStyleSheet("color: #38B4FF; font-weight: bold; background: #0E2538; border: 1px solid #1A4070; padding: 2px 6px; border-radius: 3px;")
         self.lbl_r2_name = QLabel("Warm String Ensemble  [OFF]")
         self.lbl_r2_name.setFont(HardwareFonts.label_regular())
         self.lbl_r2_name.setStyleSheet("color: #8C9BAA;")
@@ -342,7 +375,7 @@ class MainPerformancePage(QWidget):
         left_box = QHBoxLayout()
         left_tag = QLabel("[LEFT SPLIT]")
         left_tag.setFont(HardwareFonts.micro_bold())
-        left_tag.setStyleSheet("color: #FFB347; font-weight: bold; background: #2D1D0A; padding: 1px 4px; border-radius: 2px;")
+        left_tag.setStyleSheet("color: #FFB726; font-weight: bold; background: #2D1D0A; border: 1px solid #5A3810; padding: 2px 6px; border-radius: 3px;")
         self.lbl_left_name = QLabel("Acoustic Upright Bass  [OFF]")
         self.lbl_left_name.setFont(HardwareFonts.label_regular())
         self.lbl_left_name.setStyleSheet("color: #8C9BAA;")
@@ -395,6 +428,15 @@ class MainPerformancePage(QWidget):
 
         reg_bar.addStretch()
         layout.addLayout(reg_bar)
+
+    def show_toast(self, text: str, color: str = "#39FF8A", duration_ms: int = 3500):
+        """Display an animated HUD toast banner on the LCD screen."""
+        self.lbl_hud_toast.setText(text)
+        self.lbl_hud_toast.setStyleSheet(
+            f"color: {color}; font-weight: bold; background: #0A1820; "
+            f"padding: 2px 8px; border-radius: 3px; border: 1px solid {color};"
+        )
+        QTimer.singleShot(duration_ms, lambda: self.lbl_hud_toast.setText(""))
 
 
 class VoiceSelectionPage(QWidget):
@@ -532,6 +574,7 @@ class VoiceSelectionPage(QWidget):
 class StyleSelectionPage(QWidget):
     """Page 3: PSR-S975 Style Browser."""
     styleSelected = Signal(str)
+    importStyleRequested = Signal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -582,6 +625,11 @@ class StyleSelectionPage(QWidget):
         layout.addWidget(self.table)
 
         btn_box = QHBoxLayout()
+        self.btn_import = QPushButton("📂 IMPORT STYLE (.STY / .PRS / .MID / .JSON)")
+        self.btn_import.setStyleSheet("background: #0A1C30; color: #38B4FF; font-weight: bold; border: 1px solid #1A4070; padding: 4px 12px; border-radius: 3px;")
+        self.btn_import.clicked.connect(self.importStyleRequested.emit)
+        btn_box.addWidget(self.btn_import)
+
         btn_box.addStretch()
         self.btn_load = QPushButton("LOAD SELECTED STYLE")
         self.btn_load.setStyleSheet("background: #1E3825; color: #65D878; font-weight: bold; border: 1px solid #285435; padding: 4px 16px; border-radius: 3px;")
@@ -739,16 +787,34 @@ class VoiceEffectsPage(QWidget):
 
 class RegistrationPage(QWidget):
     """Page 6: Registration Memory Manager (Banks & Slots)."""
+    importBankRequested = Signal()
+    exportBankRequested = Signal()
+    slotSelected = Signal(int)
+
     def __init__(self, parent=None):
         super().__init__(parent)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 8, 10, 8)
         layout.setSpacing(6)
 
+        head_box = QHBoxLayout()
         lbl = QLabel("REGISTRATION MEMORY BANK MANAGER")
         lbl.setFont(HardwareFonts.micro_bold())
         lbl.setStyleSheet("color: #7B8D9E;")
-        layout.addWidget(lbl)
+        head_box.addWidget(lbl)
+        head_box.addStretch()
+
+        self.btn_import = QPushButton("📂 IMPORT BANK (.RGT / .JSON)")
+        self.btn_import.setStyleSheet("background: #0A1C30; color: #38B4FF; font-weight: bold; border: 1px solid #1A4070; padding: 3px 10px; border-radius: 3px;")
+        self.btn_import.clicked.connect(self.importBankRequested.emit)
+        head_box.addWidget(self.btn_import)
+
+        self.btn_export = QPushButton("💾 EXPORT BANK (.RGT / .JSON)")
+        self.btn_export.setStyleSheet("background: #281D08; color: #FFB726; font-weight: bold; border: 1px solid #583E10; padding: 3px 10px; border-radius: 3px;")
+        self.btn_export.clicked.connect(self.exportBankRequested.emit)
+        head_box.addWidget(self.btn_export)
+
+        layout.addLayout(head_box)
 
         self.table = QTableWidget()
         self.table.setColumnCount(4)
@@ -766,6 +832,136 @@ class RegistrationPage(QWidget):
             self.table.setItem(i, 3, QTableWidgetItem("120" if i==0 else "---"))
 
         layout.addWidget(self.table)
+
+        btn_bar = QHBoxLayout()
+        btn_bar.addStretch()
+        self.btn_recall = QPushButton("RECALL SELECTED SLOT")
+        self.btn_recall.setStyleSheet("background: #1E3825; color: #65D878; font-weight: bold; border: 1px solid #285435; padding: 4px 16px; border-radius: 3px;")
+        self.btn_recall.clicked.connect(self._on_recall_clicked)
+        btn_bar.addWidget(self.btn_recall)
+        layout.addLayout(btn_bar)
+
+    def _on_recall_clicked(self):
+        row = self.table.currentRow()
+        if row >= 0:
+            self.slotSelected.emit(row + 1)
+
+
+class USBFileExplorerPage(QWidget):
+    """Page 7: USB & Local File Manager for Styles, Registrations, and Songs."""
+    importStyleRequested = Signal()
+    importRegistRequested = Signal()
+    exportRegistRequested = Signal()
+    styleFileSelected = Signal(str)
+    registFileSelected = Signal(str)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(10, 8, 10, 8)
+        layout.setSpacing(6)
+
+        # Actions Header
+        header = QHBoxLayout()
+        lbl = QLabel("USB / STORAGE MANAGER")
+        lbl.setFont(HardwareFonts.micro_bold())
+        lbl.setStyleSheet("color: #38B4FF; letter-spacing: 0.8px; font-weight: bold;")
+        header.addWidget(lbl)
+        header.addStretch()
+
+        self.btn_import_style = QPushButton("📂 LOAD STYLE (.STY)")
+        self.btn_import_style.setFont(HardwareFonts.micro_bold())
+        self.btn_import_style.setStyleSheet("background: #0D2818; color: #39FF8A; border: 1px solid #1E5830; padding: 4px 8px; border-radius: 3px; font-weight: bold;")
+        self.btn_import_style.clicked.connect(self.importStyleRequested.emit)
+        header.addWidget(self.btn_import_style)
+
+        self.btn_import_regist = QPushButton("📂 LOAD REGIST (.RGT)")
+        self.btn_import_regist.setFont(HardwareFonts.micro_bold())
+        self.btn_import_regist.setStyleSheet("background: #0A1C30; color: #38B4FF; border: 1px solid #1A4070; padding: 4px 8px; border-radius: 3px; font-weight: bold;")
+        self.btn_import_regist.clicked.connect(self.importRegistRequested.emit)
+        header.addWidget(self.btn_import_regist)
+
+        self.btn_export_regist = QPushButton("💾 EXPORT (.RGT)")
+        self.btn_export_regist.setFont(HardwareFonts.micro_bold())
+        self.btn_export_regist.setStyleSheet("background: #281D08; color: #FFB726; border: 1px solid #583E10; padding: 4px 8px; border-radius: 3px; font-weight: bold;")
+        self.btn_export_regist.clicked.connect(self.exportRegistRequested.emit)
+        header.addWidget(self.btn_export_regist)
+
+        layout.addLayout(header)
+
+        # Drag & Drop Zone Prompt
+        drop_banner = QFrame()
+        drop_banner.setStyleSheet("background: #081018; border: 1px dashed #224466; border-radius: 5px; padding: 5px;")
+        db_layout = QHBoxLayout(drop_banner)
+        db_layout.setContentsMargins(6, 4, 6, 4)
+        lbl_drop = QLabel("⚡ DRAG & DROP ANY FILE: Drop any .STY, .PRS, .MID, .RGT, or .JSON file directly onto KIYA Piano to load immediately!")
+        lbl_drop.setFont(HardwareFonts.label_regular())
+        lbl_drop.setStyleSheet("color: #88B0D8; font-weight: bold;")
+        db_layout.addWidget(lbl_drop)
+        layout.addWidget(drop_banner)
+
+        # Table of Files
+        self.table = QTableWidget()
+        self.table.setColumnCount(4)
+        self.table.setHorizontalHeaderLabels(["Type", "File Name", "Size", "Action"])
+        self.table.verticalHeader().setVisible(False)
+        self.table.setSelectionBehavior(QTableWidget.SelectRows)
+        self.table.setStyleSheet("QTableWidget { background: #0A0F16; border: 1px solid #1A2838; color: #E8F4FF; } QTableWidget::item:selected { background: #1C3550; color: #39FF8A; }")
+        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.table.itemDoubleClicked.connect(self._on_table_double_clicked)
+        layout.addWidget(self.table)
+
+        self._file_paths = []
+        self.refresh_file_list()
+
+    def refresh_file_list(self):
+        styles_dir = Path("resources/styles")
+        reg_dir = Path("resources/registrations")
+
+        files = []
+        if styles_dir.exists():
+            for f in sorted(styles_dir.iterdir()):
+                if f.suffix.lower() in (".sty", ".prs", ".bcs", ".sst", ".mid", ".json"):
+                    size_kb = f.stat().st_size / 1024.0
+                    files.append(("STYLE", f.name, f"{size_kb:.1f} KB", str(f)))
+
+        if reg_dir.exists():
+            for f in sorted(reg_dir.iterdir()):
+                if f.suffix.lower() in (".rgt", ".reg", ".json"):
+                    size_kb = f.stat().st_size / 1024.0
+                    files.append(("REGIST", f.name, f"{size_kb:.1f} KB", str(f)))
+
+        self.table.setRowCount(len(files))
+        self._file_paths = []
+        for r, (ftype, fname, size_str, fpath) in enumerate(files):
+            self._file_paths.append((ftype, fpath))
+            i_type = QTableWidgetItem(f"[{ftype}]")
+            i_name = QTableWidgetItem(fname)
+            i_size = QTableWidgetItem(size_str)
+            i_act = QTableWidgetItem("▶ LOAD")
+
+            if ftype == "STYLE":
+                i_type.setForeground(QColor("#39FF8A"))
+            else:
+                i_type.setForeground(QColor("#38B4FF"))
+            i_act.setForeground(QColor("#FFB726"))
+
+            for it in (i_type, i_name, i_size, i_act):
+                it.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+
+            self.table.setItem(r, 0, i_type)
+            self.table.setItem(r, 1, i_name)
+            self.table.setItem(r, 2, i_size)
+            self.table.setItem(r, 3, i_act)
+
+    def _on_table_double_clicked(self, item):
+        row = item.row()
+        if 0 <= row < len(self._file_paths):
+            ftype, fpath = self._file_paths[row]
+            if ftype == "STYLE":
+                self.styleFileSelected.emit(fpath)
+            else:
+                self.registFileSelected.emit(fpath)
 
 
 class SongPlayerPage(QWidget):
@@ -915,11 +1111,12 @@ class CentralLCDDisplay(QWidget):
     """
     Central recessed 7-inch color display module for PSR-S975:
     - Left softkeys [A], [B], [C], [D], [E]
-    - Center color display stack with 10 functional pages
+    - Center color display stack with 10 functional pages (including USB/FILE manager)
     - Right softkeys [F], [G], [H], [I], [J]
     - Top Tab buttons [< TAB] and [TAB >]
     """
     pageChanged = Signal(int)
+    softkeyPressed = Signal(str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -936,6 +1133,7 @@ class CentralLCDDisplay(QWidget):
         self.softkeys_left: List[PhysicalButton] = []
         for name in ["A", "B", "C", "D", "E"]:
             btn = PhysicalButton(name, width=32, height=28, button_color=HardwareColors.BUTTON_DARK)
+            btn.clicked.connect(lambda n=name: self.softkeyPressed.emit(n))
             self.softkeys_left.append(btn)
             left_softkeys.addWidget(btn)
         main_layout.addLayout(left_softkeys)
@@ -955,7 +1153,7 @@ class CentralLCDDisplay(QWidget):
         tab_bar.addWidget(self.btn_tab_prev)
 
         self.tab_buttons: List[QPushButton] = []
-        page_names = ["PERF", "VOICE", "STYLE", "MIXER", "DSP/FX", "REGIST", "SONG", "MIDI", "AUDIO", "SYSTEM"]
+        page_names = ["PERF", "VOICE", "STYLE", "MIXER", "DSP/FX", "REGIST", "USB/FILE", "SONG", "MIDI", "SYSTEM"]
         for idx, p_name in enumerate(page_names):
             btn = QPushButton(p_name)
             btn.setFont(HardwareFonts.micro_regular())
@@ -975,7 +1173,7 @@ class CentralLCDDisplay(QWidget):
 
         bezel_layout.addLayout(tab_bar)
 
-        # QStackedWidget with the 10 real pages
+        # QStackedWidget with the real pages
         self.stack = QStackedWidget(self.bezel)
         self.stack.setStyleSheet("background: #121A22; border-radius: 3px;")
 
@@ -985,21 +1183,21 @@ class CentralLCDDisplay(QWidget):
         self.p_mixer = MixerPage()
         self.p_effects = VoiceEffectsPage()
         self.p_regist = RegistrationPage()
+        self.p_file = USBFileExplorerPage()
         self.p_song = SongPlayerPage()
         self.p_midi = MidiStatusPage()
-        self.p_audio = AudioSettingsPage()
         self.p_system = SystemSettingsPage()
 
-        self.stack.addWidget(self.p_perf)
-        self.stack.addWidget(self.p_voice)
-        self.stack.addWidget(self.p_style)
-        self.stack.addWidget(self.p_mixer)
-        self.stack.addWidget(self.p_effects)
-        self.stack.addWidget(self.p_regist)
-        self.stack.addWidget(self.p_song)
-        self.stack.addWidget(self.p_midi)
-        self.stack.addWidget(self.p_audio)
-        self.stack.addWidget(self.p_system)
+        self.stack.addWidget(self.p_perf)    # 0
+        self.stack.addWidget(self.p_voice)   # 1
+        self.stack.addWidget(self.p_style)   # 2
+        self.stack.addWidget(self.p_mixer)   # 3
+        self.stack.addWidget(self.p_effects) # 4
+        self.stack.addWidget(self.p_regist)  # 5
+        self.stack.addWidget(self.p_file)    # 6
+        self.stack.addWidget(self.p_song)    # 7
+        self.stack.addWidget(self.p_midi)    # 8
+        self.stack.addWidget(self.p_system)  # 9
 
         bezel_layout.addWidget(self.stack)
         main_layout.addWidget(self.bezel, 1)
@@ -1011,8 +1209,8 @@ class CentralLCDDisplay(QWidget):
         self.softkeys_right: List[PhysicalButton] = []
         for name in ["F", "G", "H", "I", "J"]:
             btn = PhysicalButton(name, width=32, height=28, button_color=HardwareColors.BUTTON_DARK)
+            btn.clicked.connect(lambda n=name: self.softkeyPressed.emit(n))
             self.softkeys_right.append(btn)
-            right_softkeys.addWidget(btn)
         main_layout.addLayout(right_softkeys)
 
         self.switch_to_page(0)
@@ -1031,3 +1229,9 @@ class CentralLCDDisplay(QWidget):
     def prev_page(self):
         curr = self.stack.currentIndex()
         self.switch_to_page((curr - 1) % self.stack.count())
+
+    def show_toast(self, text: str, color: str = "#39FF8A", duration_ms: int = 3500):
+        """Display an animated HUD toast banner on the LCD screen."""
+        if hasattr(self, "p_perf"):
+            self.p_perf.show_toast(text, color, duration_ms)
+

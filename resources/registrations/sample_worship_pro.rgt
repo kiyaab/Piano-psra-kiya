@@ -1,0 +1,110 @@
+{
+  "format": "YAMAHA_PSR_RGT_UNIVERSAL",
+  "bank": "USER_01",
+  "slots": [
+    {
+      "name": "Warm Grand & Pad",
+      "is_empty": false,
+      "right1_voice": 0,
+      "right1_volume": 1.0,
+      "layer_enabled": true,
+      "right2_voice": 89,
+      "right2_volume": 0.65,
+      "split_enabled": false,
+      "style_name": "Slow Ballad",
+      "tempo": 68,
+      "reverb_mix": 0.45
+    },
+    {
+      "name": "Electric Rhodes & Chorus",
+      "is_empty": false,
+      "right1_voice": 4,
+      "right1_volume": 0.95,
+      "layer_enabled": false,
+      "split_enabled": false,
+      "style_name": "Pop Groove",
+      "tempo": 96,
+      "chorus_mix": 0.35
+    },
+    {
+      "name": "Full Worship Orchestra",
+      "is_empty": false,
+      "right1_voice": 48,
+      "right1_volume": 0.9,
+      "layer_enabled": true,
+      "right2_voice": 61,
+      "right2_volume": 0.7,
+      "split_enabled": true,
+      "split_point": 54,
+      "left_voice": 32,
+      "left_volume": 0.9,
+      "style_name": "8-Beat Modern Pop",
+      "tempo": 74
+    },
+    {
+      "name": "Nylon Guitar & Flute",
+      "is_empty": false,
+      "right1_voice": 24,
+      "right1_volume": 1.0,
+      "layer_enabled": true,
+      "right2_voice": 73,
+      "right2_volume": 0.6,
+      "split_enabled": false,
+      "style_name": "Latin Bossa",
+      "tempo": 120
+    },
+    {
+      "name": "Drawbar Gospel Organ",
+      "is_empty": false,
+      "right1_voice": 16,
+      "right1_volume": 1.0,
+      "layer_enabled": false,
+      "split_enabled": true,
+      "split_point": 54,
+      "left_voice": 33,
+      "left_volume": 0.85,
+      "style_name": "Funk & Disco",
+      "tempo": 112
+    },
+    {
+      "name": "Ethiopian Krar & Synth",
+      "is_empty": false,
+      "right1_voice": 108,
+      "right1_volume": 1.0,
+      "layer_enabled": true,
+      "right2_voice": 81,
+      "right2_volume": 0.65,
+      "split_enabled": true,
+      "split_point": 54,
+      "left_voice": 38,
+      "left_volume": 0.9,
+      "style_name": "Ethiopian Tizita",
+      "tempo": 105
+    },
+    {
+      "name": "Classic Rock Drive",
+      "is_empty": false,
+      "right1_voice": 29,
+      "right1_volume": 0.95,
+      "layer_enabled": false,
+      "split_enabled": true,
+      "split_point": 54,
+      "left_voice": 34,
+      "left_volume": 0.95,
+      "style_name": "Classic Rock",
+      "tempo": 130
+    },
+    {
+      "name": "Synthwave 80s Lead",
+      "is_empty": false,
+      "right1_voice": 81,
+      "right1_volume": 1.0,
+      "layer_enabled": true,
+      "right2_voice": 50,
+      "right2_volume": 0.7,
+      "split_enabled": false,
+      "style_name": "80s Synthwave",
+      "tempo": 124
+    }
+  ]
+}

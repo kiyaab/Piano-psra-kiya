@@ -38,6 +38,7 @@ class MiddleControlStrip(QWidget):
     syncStartToggled = Signal(bool)
     syncStopToggled = Signal(bool)
     startStopClicked = Signal()
+    loadStyleRequested = Signal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -45,8 +46,8 @@ class MiddleControlStrip(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
         main_layout = QHBoxLayout(self)
-        main_layout.setContentsMargins(10, 4, 10, 4)
-        main_layout.setSpacing(10)
+        main_layout.setContentsMargins(8, 4, 8, 4)
+        main_layout.setSpacing(8)
         main_layout.setAlignment(Qt.AlignCenter)
 
         # =====================================================================
@@ -63,26 +64,26 @@ class MiddleControlStrip(QWidget):
         sf_layout.setSpacing(4)
 
         # ACMP ON/OFF
-        self.btn_acmp = PhysicalButton("ACMP", secondary_text="ON/OFF", width=46, height=32, button_color=HardwareColors.BUTTON_DARK, indicator="green")
+        self.btn_acmp = PhysicalButton("ACMP", secondary_text="ON/OFF", width=48, height=32, button_color=HardwareColors.BUTTON_DARK, indicator="green")
         self.btn_acmp.set_led(True)  # ACMP on by default
         self.btn_acmp.clicked.connect(self._toggle_acmp)
         sf_layout.addWidget(self.btn_acmp)
 
         # SYNC START / STOP
-        self.btn_sync_start = PhysicalButton("SYNC", secondary_text="START", width=42, height=32, button_color=HardwareColors.BUTTON_DARK, indicator="amber")
+        self.btn_sync_start = PhysicalButton("SYNC", secondary_text="START", width=46, height=32, button_color=HardwareColors.BUTTON_DARK, indicator="amber")
         self.btn_sync_start.set_led(True)  # Sync Start on by default
         self.btn_sync_start.clicked.connect(self._toggle_sync_start)
         sf_layout.addWidget(self.btn_sync_start)
 
-        self.btn_sync_stop = PhysicalButton("SYNC", secondary_text="STOP", width=42, height=32, button_color=HardwareColors.BUTTON_DARK, indicator="amber")
+        self.btn_sync_stop = PhysicalButton("SYNC", secondary_text="STOP", width=46, height=32, button_color=HardwareColors.BUTTON_DARK, indicator="amber")
         self.btn_sync_stop.clicked.connect(self._toggle_sync_stop)
         sf_layout.addWidget(self.btn_sync_stop)
 
-        # Large START / STOP Button
+        # Large START / STOP Button (Tactile 62x34)
         self.btn_start_stop = PhysicalButton(
             "START",
             secondary_text="STOP",
-            width=58,
+            width=62,
             height=34,
             button_color=HardwareColors.BUTTON_DARK,
             indicator="red"
@@ -90,12 +91,12 @@ class MiddleControlStrip(QWidget):
         self.btn_start_stop.clicked.connect(self.startStopClicked.emit)
         sf_layout.addWidget(self.btn_start_stop)
 
-        # INTRO I, II, III
-        self.btn_intro1 = PhysicalButton("INTRO I", width=42, height=30, button_color=HardwareColors.BUTTON_DARK, indicator="green")
+        # INTRO I, II
+        self.btn_intro1 = PhysicalButton("INTRO I", width=48, height=30, button_color=HardwareColors.BUTTON_DARK, indicator="green")
         self.btn_intro1.clicked.connect(lambda: self.introRequested.emit(1))
         sf_layout.addWidget(self.btn_intro1)
 
-        self.btn_intro2 = PhysicalButton("INTRO II", width=44, height=30, button_color=HardwareColors.BUTTON_DARK, indicator="green")
+        self.btn_intro2 = PhysicalButton("INTRO II", width=50, height=30, button_color=HardwareColors.BUTTON_DARK, indicator="green")
         self.btn_intro2.clicked.connect(lambda: self.introRequested.emit(2))
         sf_layout.addWidget(self.btn_intro2)
 
@@ -104,7 +105,7 @@ class MiddleControlStrip(QWidget):
         for var in ["A", "B", "C", "D"]:
             btn = PhysicalButton(
                 f"MAIN {var}",
-                width=42,
+                width=46,
                 height=30,
                 button_color=HardwareColors.BUTTON_DARK,
                 indicator="green"
@@ -115,18 +116,23 @@ class MiddleControlStrip(QWidget):
             sf_layout.addWidget(btn)
 
         # BREAK
-        self.btn_break = PhysicalButton("BREAK", width=40, height=30, button_color=HardwareColors.BUTTON_DARK, indicator="amber")
+        self.btn_break = PhysicalButton("BREAK", width=44, height=30, button_color=HardwareColors.BUTTON_DARK, indicator="amber")
         self.btn_break.clicked.connect(self.breakRequested.emit)
         sf_layout.addWidget(self.btn_break)
 
-        # ENDING I, II, III
-        self.btn_ending1 = PhysicalButton("ENDING I", width=44, height=30, button_color=HardwareColors.BUTTON_DARK, indicator="red")
+        # ENDING I, II
+        self.btn_ending1 = PhysicalButton("ENDING I", width=50, height=30, button_color=HardwareColors.BUTTON_DARK, indicator="red")
         self.btn_ending1.clicked.connect(lambda: self.endingRequested.emit(1))
         sf_layout.addWidget(self.btn_ending1)
 
-        self.btn_ending2 = PhysicalButton("ENDING II", width=46, height=30, button_color=HardwareColors.BUTTON_DARK, indicator="red")
+        self.btn_ending2 = PhysicalButton("ENDING II", width=52, height=30, button_color=HardwareColors.BUTTON_DARK, indicator="red")
         self.btn_ending2.clicked.connect(lambda: self.endingRequested.emit(2))
         sf_layout.addWidget(self.btn_ending2)
+
+        # Quick LOAD .STY file button
+        self.btn_load_style = PhysicalButton("LOAD", secondary_text=".STY", width=50, height=32, button_color=HardwareColors.BUTTON_DARK, indicator="blue")
+        self.btn_load_style.clicked.connect(self.loadStyleRequested.emit)
+        sf_layout.addWidget(self.btn_load_style)
 
         main_layout.addWidget(style_frame)
 
